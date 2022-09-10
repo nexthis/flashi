@@ -1,8 +1,8 @@
 <template>
     <Suspense>
-        <PrimaryLayouts>
+        <primary-layouts>
             <router-view></router-view>
-        </PrimaryLayouts>
+        </primary-layouts>
     </Suspense>
 </template>
 
