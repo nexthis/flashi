@@ -1,4 +1,6 @@
-trailingComma: "es5"
-semi: false
-singleQuote: false
-printWidth: 200
+{
+    "trailingComma": "es5",
+    "semi": false,
+    "singleQuote": false,
+    "printWidth": 110
+}
