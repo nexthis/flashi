@@ -25,7 +25,7 @@
 import { appWindow } from "@tauri-apps/api/window"
 
 const onClose = () => {
-    appWindow.close()
+    appWindow.hide()
 }
 
 const onMinimize = () => {
