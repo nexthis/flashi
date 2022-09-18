@@ -16,7 +16,7 @@
                         <q-icon color="white" name="mdi-text-box-multiple-outline" />
                     </q-btn>
                 </router-link>
-                <router-link :to="{ name: 'auth' }" v-slot="{ isActive }" class="link-clear">
+                <router-link :to="{ name: 'setting' }" v-slot="{ isActive }" class="link-clear">
                     <q-btn class="item" size="lg" :class="{ active: isActive }" round>
                         <q-icon color="white" name="mdi-tune" />
                     </q-btn>

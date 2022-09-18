@@ -1,3 +1,4 @@
+import "@/plugins/firebase"
 import { createApp } from "vue"
 import { createPinia } from "pinia"
 import Quasar, { config } from "@/plugins/quasar"
@@ -5,7 +6,6 @@ import routes from "@/routes"
 import App from "@/App.vue"
 import i18n from "@/plugins/i18n"
 import server from "@/server"
-import "@/plugins/firebase"
 
 const pinia = createPinia()
 const app = createApp(App)
