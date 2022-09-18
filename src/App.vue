@@ -1,13 +1,13 @@
 <template>
     <Suspense>
-        <primary-layouts>
+        <primary-layout>
             <router-view></router-view>
-        </primary-layouts>
+        </primary-layout>
     </Suspense>
 </template>
 
 <script setup lang="ts">
-import PrimaryLayouts from "@/layouts/PrimaryLayouts.vue"
+import PrimaryLayout from "@/layouts/PrimaryLayout.vue"
 </script>
 
 <style scoped lang="scss"></style>

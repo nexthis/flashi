@@ -42,7 +42,7 @@ const { t } = useI18n()
 const auth = getAuth()
 const router = useRouter()
 const email = ref<string>("")
-const remember = ref<boolean>(false)
+const remember = ref<boolean>(true)
 const password = ref<string>("")
 
 const onSignIn = async () => {
@@ -53,7 +53,7 @@ const onSignIn = async () => {
 
 <style scoped lang="scss">
 .card {
-    max-width: 550px;
+    max-width: 450px;
     width: 100%;
     margin: auto;
     padding: 20px 30px;
@@ -71,7 +71,7 @@ const onSignIn = async () => {
     z-index: 0;
 }
 .image {
-    clip-path: ellipse(80% 42% at 36% 8%);
+    clip-path: ellipse(80% 45% at 36% 8%);
     max-width: 100%;
     height: auto;
 }
@@ -79,7 +79,7 @@ const onSignIn = async () => {
     min-height: 230px;
     height: 100%;
     z-index: 10;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 .forgot {
     position: relative;
@@ -99,6 +99,7 @@ const onSignIn = async () => {
     &:focus::after {
         opacity: 1;
         transform: translate3d(0, 0.2em, 0);
+        will-change: transform;
     }
 }
 </style>
