@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="q-mt-lg flex justify-between">
-                    <q-btn :to="{ name: 'home' }" size="lg" color="negative">{{ t("back") }}</q-btn>
+                    <q-btn :to="{ name: 'dashboard' }" size="lg" color="negative">{{ t("back") }}</q-btn>
                     <q-btn @click="onSignIn" size="lg" color="primary">{{ t("login") }}</q-btn>
                 </div>
             </q-card-section>
@@ -47,7 +47,7 @@ const password = ref<string>("")
 
 const onSignIn = async () => {
     await signInWithEmailAndPassword(auth, email.value, password.value)
-    await router.push({ name: "home" })
+    await router.push({ name: "dashboard" })
 }
 </script>
 

@@ -6,19 +6,25 @@
             </q-btn>
 
             <div class="menu-content">
-                <q-btn :to="{ name: 'home' }" class="item" size="lg" round>
-                    <q-icon color="white" name="mdi-view-dashboard-outline" />
-                </q-btn>
-                <q-btn class="item" size="lg" round>
-                    <q-icon name="mdi-text-box-multiple-outline" />
-                </q-btn>
-                <q-btn class="item" size="lg" round>
-                    <q-icon name="mdi-tune" />
-                </q-btn>
+                <router-link :to="{ name: 'dashboard' }" v-slot="{ isActive }" class="link-clear">
+                    <q-btn class="item" :class="{ active: isActive }" size="lg" round>
+                        <q-icon color="white" name="mdi-view-dashboard-outline" />
+                    </q-btn>
+                </router-link>
+                <router-link :to="{ name: 'macro' }" v-slot="{ isActive }" class="link-clear">
+                    <q-btn class="item" size="lg" :class="{ active: isActive }" round>
+                        <q-icon color="white" name="mdi-text-box-multiple-outline" />
+                    </q-btn>
+                </router-link>
+                <router-link :to="{ name: 'auth' }" v-slot="{ isActive }" class="link-clear">
+                    <q-btn class="item" size="lg" :class="{ active: isActive }" round>
+                        <q-icon color="white" name="mdi-tune" />
+                    </q-btn>
+                </router-link>
             </div>
         </div>
         <div class="content">
-            <slot />
+            <router-view />
         </div>
     </q-page>
 </template>
@@ -46,11 +52,15 @@
     height: 100%;
     width: 100%;
 }
+
 .item {
     background-color: lighten($color: $dark, $amount: 20);
-    & .router-link-active {
+    &.active {
         background-color: $primary;
     }
+}
+.link-clear {
+    text-decoration: unset;
 }
 .container {
     display: flex;

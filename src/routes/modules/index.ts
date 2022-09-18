@@ -1,5 +1,6 @@
-import home from "./home"
+import dashboard from "./dashboard"
 import auth from "./auth"
+import macro from "./macro"
 
-export default [home, auth]
+export default [dashboard, auth, macro]
 //todo auto import on build time
