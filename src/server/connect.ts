@@ -2,11 +2,14 @@ import { getFirestore, doc, onSnapshot, DocumentData } from "firebase/firestore"
 import { getAuth, User } from "firebase/auth"
 import _ from "lodash"
 
-type OfferType = null | undefined | DocumentData
+interface OfferInterface {
+    value: null | undefined | DocumentData
+    isInit: boolean
+}
 
 const db = getFirestore()
 const auth = getAuth()
-let offer: OfferType = null
+const offer: OfferInterface = { value: null, isInit: false }
 
 export async function connectionListener() {
     const user = (await new Promise((resolve, reject) => {
@@ -26,15 +29,16 @@ export async function connectionListener() {
     const q = doc(db, "users", user.uid, "connection_pool", "offer")
 
     onSnapshot(q, (snapshot) => {
-        if (!offer) {
-            offer = snapshot.data()
+        if (!offer.isInit) {
+            offer.value = snapshot.data()
+            offer.isInit = true
             return
         }
-        offer = snapshot.data()
-        if (_.has(offer, "sdp") && _.has(offer, "type")) {
+        offer.value = snapshot.data()
+        if (_.has(offer, "value.sdp") && _.has(offer, "value.type")) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-ignore
-            establishConnection(offer)
+            establishConnection(offer.value)
         }
     })
 }
