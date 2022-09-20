@@ -10,11 +10,13 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const auth = getAuth()
+
+    //TODO:Refactor
     const user = await new Promise((resolve, reject) => {
         const unsubscribe = auth.onAuthStateChanged(
             (user) => {
                 unsubscribe()
-                console.log("test")
+                console.log("beforeEach waiting for user !refactor!")
 
                 resolve(user)
             },

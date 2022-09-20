@@ -1,5 +1,6 @@
 import { getFirestore, doc, onSnapshot, DocumentData } from "firebase/firestore"
 import { getAuth, User } from "firebase/auth"
+import { invoke } from "@tauri-apps/api/tauri"
 import _ from "lodash"
 
 interface OfferInterface {
@@ -12,11 +13,12 @@ const auth = getAuth()
 const offer: OfferInterface = { value: null, isInit: false }
 
 export async function connectionListener() {
+    //TODO: Refactor
     const user = (await new Promise((resolve, reject) => {
         const unsubscribe = auth.onAuthStateChanged(
             (user) => {
                 unsubscribe()
-                console.log("wait")
+                console.log("connectionListener waiting for user !refactor!")
 
                 if (user) {
                     resolve(user)
@@ -45,4 +47,5 @@ export async function connectionListener() {
 
 function establishConnection(offer: { sdp: string; type: "offer" }) {
     console.log("connect", offer)
+    invoke("connect")
 }
