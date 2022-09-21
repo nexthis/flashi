@@ -1,4 +1,4 @@
-import { getFirestore, doc, onSnapshot, DocumentData } from "firebase/firestore"
+import { getFirestore, doc, setDoc, onSnapshot, DocumentData } from "firebase/firestore"
 import { getAuth, User } from "firebase/auth"
 import { invoke } from "@tauri-apps/api/tauri"
 import _ from "lodash"
@@ -45,7 +45,16 @@ export async function connectionListener() {
     })
 }
 
-function establishConnection(offer: { sdp: string; type: "offer" }) {
+async function establishConnection(offer: { sdp: string; type: "offer" }) {
     console.log("connect", offer)
-    invoke("connect")
+    try {
+        const result = await invoke<{ sdp: string; type: string }>("connect", {
+            offer: JSON.stringify(offer),
+        })
+        console.log(result)
+
+        await setDoc(doc(db, "users", auth.currentUser!.uid, "connection_pool", "answer"), result)
+    } catch (err) {
+        console.log("error", err)
+    }
 }
