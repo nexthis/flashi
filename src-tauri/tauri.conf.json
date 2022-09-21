@@ -16,7 +16,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Tool",
       "copyright": "",
       "deb": {
         "depends": []
@@ -29,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.flashi.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -56,11 +56,13 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
         "resizable": true,
-        "title": "Tauri App",
+        "title": "Flashi",
         "decorations": false,
-        "width": 800
+        "height": 600,
+        "width": 800,
+        "minHeight": 600,
+        "minWidth": 800
       }
     ],
 

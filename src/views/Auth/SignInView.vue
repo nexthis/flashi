@@ -80,6 +80,10 @@ const onSignIn = async () => {
     height: 100%;
     z-index: 10;
     margin-bottom: 10px;
+
+    @media (max-height: 700px) {
+        min-height: 190px;
+    }
 }
 .forgot {
     position: relative;

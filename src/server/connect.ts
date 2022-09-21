@@ -1,6 +1,9 @@
 import { getFirestore, doc, setDoc, onSnapshot, DocumentData } from "firebase/firestore"
 import { getAuth, User } from "firebase/auth"
 import { invoke } from "@tauri-apps/api/tauri"
+import { listen } from "@tauri-apps/api/event"
+import { Notify } from "quasar"
+
 import _ from "lodash"
 
 interface OfferInterface {
@@ -46,15 +49,19 @@ export async function connectionListener() {
 }
 
 async function establishConnection(offer: { sdp: string; type: "offer" }) {
-    console.log("connect", offer)
     try {
         const result = await invoke<{ sdp: string; type: string }>("connect", {
             offer: JSON.stringify(offer),
         })
-        console.log(result)
 
         await setDoc(doc(db, "users", auth.currentUser!.uid, "connection_pool", "answer"), result)
     } catch (err) {
-        console.log("error", err)
+        Notify.create({ color: "negative", message: "Connection fails ", position: "bottom-right" })
     }
 }
+
+listen("peer-connection-state-change", (s) => {
+    console.log(s.payload)
+
+    Notify.create({ color: "positive", message: "Connection established", position: "bottom-right" })
+})

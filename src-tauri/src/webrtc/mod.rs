@@ -1,5 +1,6 @@
 //use crate::state::GlobalState;
 use std::sync::Arc;
+use tauri::Window;
 use webrtc::api::interceptor_registry::register_default_interceptors;
 use webrtc::api::media_engine::MediaEngine;
 use webrtc::api::APIBuilder;
@@ -11,11 +12,11 @@ use webrtc::peer_connection::configuration::RTCConfiguration;
 use webrtc::peer_connection::peer_connection_state::RTCPeerConnectionState;
 use webrtc::peer_connection::sdp::session_description::RTCSessionDescription;
 
-mod message;
+mod events;
 
 //TODO: This is proof of concept, try to refactor
 #[tauri::command]
-pub async fn connect(offer: String) -> Result<RTCSessionDescription, String> {
+pub async fn connect(offer: String, window: Window) -> Result<RTCSessionDescription, String> {
     // Create a MediaEngine object to configure the supported codec
     let mut m = MediaEngine::default();
 
@@ -62,15 +63,13 @@ pub async fn connect(offer: String) -> Result<RTCSessionDescription, String> {
     // This will notify you when the peer has connected/disconnected
     peer_connection
         .on_peer_connection_state_change(Box::new(move |s: RTCPeerConnectionState| {
-            println!("Peer Connection State has changed: {}", s);
+            //Dispach event
+            window
+                .emit("peer-connection-state-change", s.to_string())
+                .unwrap();
 
-            if s == RTCPeerConnectionState::Failed {
-                // Wait until PeerConnection has had no network activity for 30 seconds or another failure. It may be reconnected using an ICE Restart.
-                // Use webrtc.PeerConnectionStateDisconnected if you are interested in detecting faster timeout.
-                // Note that the PeerConnection may come back from PeerConnectionStateDisconnected.
-                println!("Peer Connection has gone to failed exiting");
-                //let _ = done_tx.try_send(());
-            }
+            //Run event
+            events::on_statu_change(s);
 
             Box::pin(async {})
         }))
@@ -86,17 +85,11 @@ pub async fn connect(offer: String) -> Result<RTCSessionDescription, String> {
             // Register channel opening handling
             Box::pin(async move {
                 let d2 = Arc::clone(&d);
-                let d_label2 = d_label.clone();
-                let d_id2 = d_id;
-
-                d.on_open(Box::new(move || {
-                    println!("Data channel '{}'-'{}' open. Random messages will now be sent to any connected DataChannels every 5 seconds", d_label2, d_id2);
-                    Box::pin(async move {})
-                })).await;
 
                 // Register text message handling
                 d.on_message(Box::new(move |msg: DataChannelMessage| {
-                    message::on_message(msg, &d2);
+                    //Run event
+                    events::on_message(msg, &d2);
                     Box::pin(async {})
                 }))
                 .await;
