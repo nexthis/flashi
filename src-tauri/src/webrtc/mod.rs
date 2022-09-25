@@ -65,7 +65,7 @@ pub async fn connect(offer: String, window: Window) -> Result<RTCSessionDescript
         .on_peer_connection_state_change(Box::new(move |s: RTCPeerConnectionState| {
             //Dispach event
             window
-                .emit("peer-connection-state-change", s.to_string())
+                .emit("peer-connection-state-change", s.to_string().to_lowercase())
                 .unwrap();
 
             //Run event

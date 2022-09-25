@@ -1,5 +1,5 @@
 <template>
-    <q-layout>
+    <q-layout :class="{ connected: connection.isConnected }">
         <q-header>
             <!-- this is where the Pages are injected -->
             <div data-tauri-drag-region class="titlebar">
@@ -22,7 +22,10 @@
 </template>
 
 <script setup lang="ts">
+import { useConnection } from "@/store/useConnection"
 import { appWindow } from "@tauri-apps/api/window"
+
+const connection = useConnection()
 
 const onClose = () => {
     appWindow.hide()
@@ -69,5 +72,18 @@ const onMaximize = () => {
 .q-page {
     border: $primary 2px solid;
     border-top: none;
+}
+
+.connected {
+    .titlebar {
+        background: $positive;
+    }
+    .titlebar-button:hover {
+        background: darken($positive, 5%);
+    }
+    .q-page {
+        border: $positive 2px solid;
+        border-top: none;
+    }
 }
 </style>

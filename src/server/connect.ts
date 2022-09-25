@@ -1,5 +1,6 @@
 import { getFirestore, doc, setDoc, onSnapshot, DocumentData } from "firebase/firestore"
 import { getAuth, User } from "firebase/auth"
+import { useConnection } from "@/store/useConnection"
 import { invoke } from "@tauri-apps/api/tauri"
 import { listen } from "@tauri-apps/api/event"
 import { Notify } from "quasar"
@@ -60,8 +61,12 @@ async function establishConnection(offer: { sdp: string; type: "offer" }) {
     }
 }
 
-listen("peer-connection-state-change", (s) => {
-    console.log(s.payload)
+listen<RTCPeerConnectionState>("peer-connection-state-change", (s) => {
+    const connection = useConnection()
 
-    Notify.create({ color: "positive", message: "Connection established", position: "bottom-right" })
+    if (s.payload === "connected") {
+        connection.connect()
+    } else {
+        connection.disconnect()
+    }
 })

@@ -22,3 +22,7 @@ pub enum Token {
     /** A sequence of characters to have number representation  */
     Numeric { raw: String, variant: NumericTypes },
 }
+
+// impl  Copy for  Token{
+
+// }

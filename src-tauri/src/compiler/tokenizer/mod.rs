@@ -1,6 +1,7 @@
-use std::fmt::Display;
+use std::{fmt::Display, hash::Hash};
 
-use super::tokens::Token;
+pub mod tokens;
+use tokens::Token;
 
 pub fn run<T: Display>(value: T) -> Vec<Token> {
     let mut result: Vec<Token> = Vec::new();
@@ -14,6 +15,7 @@ pub fn run<T: Display>(value: T) -> Vec<Token> {
                 None => break,
             };
 
+            //WHEN STRING
             if char.is_alphabetic() {
                 let mut value = String::new();
                 while char.is_alphabetic() {
@@ -27,24 +29,51 @@ pub fn run<T: Display>(value: T) -> Vec<Token> {
                 continue;
             }
 
+            //WHEN NUMBER
             if char.is_numeric() {
                 let mut value = String::new();
+                let mut token_type: tokens::NumericTypes = tokens::NumericTypes::Decimal;
                 while char.is_numeric() {
+                    //get and push number
                     value.push(char);
                     char = match chars.next() {
                         Some(val) => val,
                         None => break,
                     };
+
+                    //when next char is %
+                    if char == '%' {
+                        token_type = tokens::NumericTypes::Percentage;
+                    }
+
+                    //when next char is .
+                    if char == '.' {
+                        token_type = tokens::NumericTypes::Floating;
+                        value.push(char);
+
+                        //"skip" to next number
+                        char = match chars.next() {
+                            Some(val) => val,
+                            None => continue,
+                        };
+                    }
                 }
+
+                //Add number
                 result.push(Token::Numeric {
                     raw: value,
-                    variant: super::tokens::NumericTypes::Decimal,
+                    variant: token_type,
                 });
                 continue;
             }
+
+            //WHEN OPERATOR
+            if [','].contains(&char) {
+                result.push(Token::Operator(char.to_string()))
+            }
         }
-        
-        //Add EOL when is not duplicate 
+
+        //Add EOL when is not duplicate
         if let Some(val) = result.last() {
             if let Token::EOL = val {
             } else {
