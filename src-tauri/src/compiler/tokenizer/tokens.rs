@@ -1,4 +1,5 @@
-#[derive(Debug)]
+
+#[derive(Debug, Clone)]
 pub enum NumericTypes {
     Decimal,
     Floating,
@@ -23,6 +24,14 @@ pub enum Token {
     Numeric { raw: String, variant: NumericTypes },
 }
 
-// impl  Copy for  Token{
-
-// }
+impl  Clone for  Token{
+    fn clone(&self) -> Self {
+        match self {
+            Self::EOL => Self::EOL,
+            Self::String(arg0) => Self::String(arg0.clone()),
+            Self::Operator(arg0) => Self::Operator(arg0.clone()),
+            Self::Char(arg0) => Self::Char(arg0.clone()),
+            Self::Numeric { raw, variant } => Self::Numeric { raw: raw.clone(), variant: variant.clone() },
+        }
+    }
+}

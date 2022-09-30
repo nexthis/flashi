@@ -1,5 +1,5 @@
 import { getFirestore, doc, setDoc, onSnapshot, DocumentData } from "firebase/firestore"
-import { getAuth, User } from "firebase/auth"
+import { User } from "firebase/auth"
 import { useConnection } from "@/store/useConnection"
 import { invoke } from "@tauri-apps/api/tauri"
 import { listen } from "@tauri-apps/api/event"
@@ -13,25 +13,10 @@ interface OfferInterface {
 }
 
 const db = getFirestore()
-const auth = getAuth()
+
 const offer: OfferInterface = { value: null, isInit: false }
 
-export async function connectionListener() {
-    //TODO: Refactor
-    const user = (await new Promise((resolve, reject) => {
-        const unsubscribe = auth.onAuthStateChanged(
-            (user) => {
-                unsubscribe()
-                console.log("connectionListener waiting for user !refactor!")
-
-                if (user) {
-                    resolve(user)
-                }
-            },
-            () => reject(false)
-        )
-    })) as User
-
+export async function connectionListener(user: User) {
     const q = doc(db, "users", user.uid, "connection_pool", "offer")
 
     onSnapshot(q, (snapshot) => {
@@ -44,18 +29,18 @@ export async function connectionListener() {
         if (_.has(offer, "value.sdp") && _.has(offer, "value.type")) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-ignore
-            establishConnection(offer.value)
+            establishConnection(user, offer.value)
         }
     })
 }
 
-async function establishConnection(offer: { sdp: string; type: "offer" }) {
+async function establishConnection(user: User, offer: { sdp: string; type: "offer" }) {
     try {
         const result = await invoke<{ sdp: string; type: string }>("connect", {
             offer: JSON.stringify(offer),
         })
 
-        await setDoc(doc(db, "users", auth.currentUser!.uid, "connection_pool", "answer"), result)
+        await setDoc(doc(db, "users", user.uid, "connection_pool", "answer"), result)
     } catch (err) {
         Notify.create({ color: "negative", message: "Connection fails ", position: "bottom-right" })
     }
