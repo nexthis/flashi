@@ -8,9 +8,9 @@ pub fn make() -> SystemTray {
     SystemTray::new().with_menu(tray_menu)
 }
 
-pub fn on_system_tray_event(app: &AppHandle, event: SystemTrayEvent) {
+pub fn on_system_tray_event(_app: &AppHandle, event: SystemTrayEvent) {
     match event {
-        SystemTrayEvent::MenuItemClick { tray_id, id, .. } => match id.as_str() {
+        SystemTrayEvent::MenuItemClick { tray_id, .. } => match tray_id.as_str() {
             "exit" => {
                 std::process::exit(0);
             }
