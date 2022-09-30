@@ -16,7 +16,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "Tool",
+      "category": "Productivity",
       "copyright": "",
       "deb": {
         "depends": []
@@ -58,6 +58,7 @@
         "fullscreen": false,
         "resizable": true,
         "title": "Flashi",
+        "label": "main",
         "decorations": false,
         "height": 600,
         "width": 800,
