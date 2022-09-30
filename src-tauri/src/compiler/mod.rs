@@ -1,14 +1,19 @@
+use duckscript::runner;
+use duckscript::types;
+use duckscript::types::error::ScriptError;
+use duckscriptsdk;
 use std::fmt::Display;
 
-mod commands;
-mod parser;
-mod tokenizer;
+pub fn compile<T: Display>(value: T) -> Result<duckscript::types::runtime::Context, ScriptError> {
+    let mut context = types::runtime::Context::new();
 
-pub fn compile<T: Display>(value: T) {
-    let value = value.to_string();
-    let values = tokenizer::run(value);
 
-    parser::run(values);
+    match duckscriptsdk::load(&mut context.commands) {
+        Ok(it) => it,
+        Err(err) => return Err(err),
+    };
+
+    runner::run_script(value.to_string().as_str(), context)
 }
 
 #[cfg(test)]
@@ -35,9 +40,10 @@ mod tests {
     #[test]
     fn it_works_simple() {
         let code = r#"
-            PRESS a
-            SLEEP 500
-            MOVE 5, 55.5
+            out = set "Hello World"
+
+            # This will print: "The out variable holds the value: Hello World"
+            echo The out variable holds the value: ${out}
         "#;
         compile(code);
     }

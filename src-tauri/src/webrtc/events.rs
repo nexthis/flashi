@@ -2,6 +2,8 @@ use std::sync::Arc;
 use webrtc::data_channel::data_channel_message::DataChannelMessage;
 use webrtc::data_channel::RTCDataChannel;
 use webrtc::peer_connection::peer_connection_state::RTCPeerConnectionState;
+use crate::compiler::compile;
+
 
 pub fn on_message(msg: DataChannelMessage, channel: &Arc<RTCDataChannel>) {
     let msg_str = String::from_utf8(msg.data.to_vec()).unwrap();
@@ -10,6 +12,7 @@ pub fn on_message(msg: DataChannelMessage, channel: &Arc<RTCDataChannel>) {
         channel.label().to_owned(),
         msg_str
     );
+    compile(msg_str);
 }
 
 pub fn on_statu_change(s: RTCPeerConnectionState) {

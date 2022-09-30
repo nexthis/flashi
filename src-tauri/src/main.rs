@@ -4,6 +4,7 @@
 )]
 
 use app::state;
+use app::tray;
 use app::webrtc;
 use tauri::{SystemTray, SystemTrayMenu};
 
@@ -14,7 +15,8 @@ fn main() {
     tauri::Builder::default()
         .manage(state::GlobalState::new())
         .invoke_handler(tauri::generate_handler![webrtc::connect])
-        .system_tray(system_tray)
+        .system_tray(tray::make())
+        .on_system_tray_event(tray::on_system_tray_event)
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
