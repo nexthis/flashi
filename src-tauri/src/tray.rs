@@ -19,7 +19,7 @@ pub fn on_system_tray_event(app: &AppHandle, event: SystemTrayEvent) {
             window.show().unwrap();
         }
 
-        SystemTrayEvent::MenuItemClick { tray_id, .. } => match tray_id.as_str() {
+        SystemTrayEvent::MenuItemClick { tray_id: _, id, .. } => match id.as_str() {
             "exit" => {
                 app.exit(0);
             }
