@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 
+use app::compiler;
 use app::state;
 use app::tray;
 use app::webrtc;
@@ -10,7 +11,7 @@ use app::webrtc;
 fn main() {
     tauri::Builder::default()
         .manage(state::GlobalState::new())
-        .invoke_handler(tauri::generate_handler![webrtc::connect])
+        .invoke_handler(tauri::generate_handler![webrtc::connect, compiler::compile])
         .system_tray(tray::make())
         .on_system_tray_event(tray::on_system_tray_event)
         .run(tauri::generate_context!())

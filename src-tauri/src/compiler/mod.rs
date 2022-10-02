@@ -6,12 +6,16 @@ use std::fmt::Display;
 
 mod commands;
 
-pub fn compile<T: Display>(value: T) -> Result<duckscript::types::runtime::Context, ScriptError> {
+#[tauri::command]
+pub fn compile(value: String) -> Result<String, String> {
     let mut context = types::runtime::Context::new();
 
     commands::load(&mut context.commands);
 
-    runner::run_script(value.to_string().as_str(), context)
+    match runner::run_script(value.to_string().as_str(), context) {
+        Ok(_) => return Ok("succes".to_string()),
+        Err(err) => return Err(err.to_string()),
+    }
 }
 
 #[cfg(test)]
@@ -37,7 +41,7 @@ mod tests {
         "#;
 
         let now = Instant::now();
-        compile(code);
+        compile(code.to_string());
         let elapsed_time = now.elapsed();
 
         println!("Running it took {:?} seconds.", elapsed_time);

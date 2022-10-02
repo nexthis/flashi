@@ -15,7 +15,7 @@ export default defineConfig({
         eslint(),
         vueI18n({
             defaultSFCLang: "json5",
-            include: resolve(dirname(fileURLToPath(import.meta.url)), "./path/to/src/locales/**"),
+            include: resolve(dirname(fileURLToPath(import.meta.url)), "./src/locales/**"),
         }),
     ],
     resolve: {

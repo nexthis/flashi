@@ -1,4 +1,6 @@
-import { Quasar, Notify, Loading } from "quasar"
+import { Quasar, Dialog } from "quasar"
+import { useStorage } from "@vueuse/core"
+import { KEYS } from "@/constants/storage"
 //font
 import "@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css"
 // Import icon libraries
@@ -11,9 +13,9 @@ import "quasar/src/css/index.sass"
 import type { QuasarPluginOptions } from "quasar/dist/types/plugin"
 
 export const config: Partial<QuasarPluginOptions> = {
-    plugins: { Notify, Loading },
+    plugins: { Dialog },
     config: {
-        dark: true,
+        dark: useStorage(KEYS.dark, true).value,
     },
 }
 

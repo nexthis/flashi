@@ -60,7 +60,7 @@ const auth = useAuth()
 .item {
     background-color: lighten($color: $dark, $amount: 20);
     &.active {
-        background-color: $primary;
+        background-color: $primary !important;
     }
 }
 .link-clear {
@@ -73,5 +73,15 @@ const auth = useAuth()
     height: inherit;
     width: 100%;
     padding: 15px 15px 15px 15px;
+}
+
+//when white mode
+.body--light {
+    .item {
+        background-color: lighten($color: $dark, $amount: 50);
+    }
+    .menu {
+        background-color: darken($color: white, $amount: 20);
+    }
 }
 </style>
