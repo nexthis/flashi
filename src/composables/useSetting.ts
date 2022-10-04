@@ -3,6 +3,7 @@ import { useQuasar } from "quasar"
 import { useStorage } from "@vueuse/core"
 import { KEYS } from "@/constants/storage"
 
+//TODO: Refactor task: https://trello.com/c/N37UkTdo
 export function useSetting() {
     const { availableLocales, locale: localeGlobal } = useI18n({ useScope: "global" })
     const quasar = useQuasar()

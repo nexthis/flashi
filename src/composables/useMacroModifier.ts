@@ -2,6 +2,7 @@ import { useAuth } from "@/store/useAuth"
 import { getFirestore, addDoc, doc, collection, deleteDoc } from "firebase/firestore"
 import { KEYS } from "@/constants/storage"
 
+//TODO: Refactor task: https://trello.com/c/zSXjvU1P
 export function useMacroModifier() {
     const auth = useAuth()
     const db = getFirestore()

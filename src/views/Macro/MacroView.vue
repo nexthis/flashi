@@ -40,14 +40,14 @@
 import { useQuasar } from "quasar"
 import { useMacroList } from "@/composables/useMacroList"
 import { useMacroModifier } from "@/composables/useMacroModifier"
-import { useRunScript } from "@/composables/useRunScript"
+import { useScript } from "@/composables/useScript"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
 const quasar = useQuasar()
 const { items, isLoading } = useMacroList()
 const { remove } = useMacroModifier()
-const { run } = useRunScript()
+const { run } = useScript()
 
 const onDelete = async (value: UserMacro) => {
     quasar

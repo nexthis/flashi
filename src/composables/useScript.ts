@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri"
 
-export function useRunScript() {
+export function useScript() {
     async function run(script: string) {
         await invoke("compile", { value: script })
     }

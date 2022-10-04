@@ -2,6 +2,7 @@ import { getAuth, User } from "firebase/auth"
 import { defineStore } from "pinia"
 import { ref, computed } from "vue"
 
+//TODO: Remove
 export const useAuth = defineStore("auth", () => {
     //state
     const auth = getAuth()

@@ -5,6 +5,7 @@ import { KEYS } from "@/constants/storage"
 import { ref } from "vue"
 import _ from "lodash"
 
+//TODO: Refactor task: https://trello.com/c/zSXjvU1P
 export function useMacroList() {
     const auth = useAuth()
     const db = getFirestore()

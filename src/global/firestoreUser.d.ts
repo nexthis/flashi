@@ -1,10 +1,10 @@
 interface UserConnectionPool {
     sdp: string
-    type: string
+    type: "answer" | "offer"
 }
 
 interface UserMacro {
     uuid: string
     code: string
-    name: "answer"
+    name: string
 }
