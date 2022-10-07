@@ -11,7 +11,7 @@
         </div>
 
         <div class="layout-grid" v-else>
-            <q-card v-for="item in items" :key="item.uuid">
+            <q-card v-for="item in data" :key="item.uuid">
                 <q-card-section>
                     {{ item.uuid }}
                     <div class="text-h6">{{ item.name }}</div>
@@ -38,15 +38,13 @@
 <script setup lang="ts">
 /* globals  UserMacro*/
 import { useQuasar } from "quasar"
-import { useMacroList } from "@/composables/useMacroList"
-import { useMacroModifier } from "@/composables/useMacroModifier"
+import { useMacroList } from "@/composables/queries/useMacroList"
 import { useScript } from "@/composables/useScript"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
 const quasar = useQuasar()
-const { items, isLoading } = useMacroList()
-const { remove } = useMacroModifier()
+const { data, isLoading } = useMacroList()
 const { run } = useScript()
 
 const onDelete = async (value: UserMacro) => {
@@ -57,8 +55,7 @@ const onDelete = async (value: UserMacro) => {
             cancel: true,
         })
         .onOk(async () => {
-            await remove(value.uuid)
-            items.value = items.value.filter((item) => item.uuid !== value.uuid)
+            console.log(value)
         })
 }
 

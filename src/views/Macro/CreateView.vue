@@ -8,7 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import { useMacroModifier } from "@/composables/useMacroModifier"
 import { ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
@@ -18,10 +17,9 @@ const code = ref("")
 
 const { t } = useI18n()
 const routes = useRouter()
-const { updateOrCreate } = useMacroModifier()
 
 const onModifier = async () => {
-    await updateOrCreate({ name: name.value, code: code.value })
+    // await updateOrCreate({ name: name.value, code: code.value })
     routes.back()
 }
 </script>

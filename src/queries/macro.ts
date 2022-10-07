@@ -1,17 +1,16 @@
-import { getAuth } from "firebase/auth"
+import { getUserOrThrow } from "@/utils/auth"
 import { getFirestore, collection, query, getDocs, QuerySnapshot, DocumentData } from "firebase/firestore"
 
 export async function list(): Promise<QuerySnapshot<DocumentData>> {
-    const auth = getAuth()
     const db = getFirestore()
+    const user = await getUserOrThrow()
 
-    if (!auth.currentUser) {
-        throw Error("User not define!")
-    }
+    console.debug("Call list")
 
-    const q = query(collection(db, "users", auth.currentUser.uid, "macros"))
+    const q = query(collection(db, "users", user.uid, "macros"))
     return await getDocs(q)
 }
+list.key = "macros"
 
 //export async function get(): Promise<QuerySnapshot<DocumentData>>
 

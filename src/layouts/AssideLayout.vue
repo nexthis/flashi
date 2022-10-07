@@ -2,7 +2,7 @@
     <q-page class="container">
         <div class="menu">
             <q-btn class="item" size="xl" round>
-                <q-avatar>{{ auth.user?.email?.charAt(0) }}</q-avatar>
+                <q-avatar>{{ "T" }}</q-avatar>
             </q-btn>
 
             <div class="menu-content">
@@ -29,11 +29,7 @@
     </q-page>
 </template>
 
-<script lang="ts" setup>
-import { useAuth } from "@/store/useAuth"
-
-const auth = useAuth()
-</script>
+<script lang="ts" setup></script>
 
 <style scoped lang="scss">
 .menu {

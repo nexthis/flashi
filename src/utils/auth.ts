@@ -12,3 +12,12 @@ export async function checkAuth(): Promise<User | false> {
         )
     })
 }
+
+export async function getUserOrThrow(): Promise<User> {
+    const auth = getAuth()
+    if (!auth.currentUser) {
+        throw Error("User not define!")
+    }
+
+    return auth.currentUser
+}
