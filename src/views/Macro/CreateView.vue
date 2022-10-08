@@ -8,9 +8,12 @@
 </template>
 
 <script setup lang="ts">
+import { useMacroCreate } from "@/composables/queries/useMacroCreate"
 import { ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
+
+const { mutateAsync } = useMacroCreate()
 
 const name = ref("")
 const code = ref("")
@@ -19,7 +22,7 @@ const { t } = useI18n()
 const routes = useRouter()
 
 const onModifier = async () => {
-    // await updateOrCreate({ name: name.value, code: code.value })
+    await mutateAsync({ name: name.value, code: code.value })
     routes.back()
 }
 </script>

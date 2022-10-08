@@ -1,7 +1,7 @@
 <template>
     <q-page class="container">
         <div class="menu">
-            <q-btn class="item" size="xl" round>
+            <q-btn :to="{ name: 'account' }" class="item" size="xl" round>
                 <q-avatar>{{ "T" }}</q-avatar>
             </q-btn>
 

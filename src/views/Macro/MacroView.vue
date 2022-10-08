@@ -11,7 +11,7 @@
         </div>
 
         <div class="layout-grid" v-else>
-            <q-card v-for="item in data" :key="item.uuid">
+            <q-card v-for="item in data?.data" :key="item.uuid">
                 <q-card-section>
                     {{ item.uuid }}
                     <div class="text-h6">{{ item.name }}</div>
@@ -32,19 +32,32 @@
                 </q-card-actions>
             </q-card>
         </div>
+        <div class="flex-1"></div>
+        <div class="q-pa-lg flex flex-center">
+            <q-pagination
+                v-model="currentPage"
+                @update:model-value="page"
+                :max="data.max"
+                size="15px"
+                direction-links
+            />
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 /* globals  UserMacro*/
 import { useQuasar } from "quasar"
-import { useMacroList } from "@/composables/queries/useMacroList"
+import { useMacroPaginate } from "@/composables/queries/useMacroPaginate"
 import { useScript } from "@/composables/useScript"
 import { useI18n } from "vue-i18n"
+import { ref } from "vue"
+
+const currentPage = ref(1)
 
 const { t } = useI18n()
 const quasar = useQuasar()
-const { data, isLoading } = useMacroList()
+const { data, isLoading, page } = useMacroPaginate()
 const { run } = useScript()
 
 const onDelete = async (value: UserMacro) => {
