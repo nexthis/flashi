@@ -1,10 +1,11 @@
-import messages from "@intlify/vite-plugin-vue-i18n/messages"
-import { createI18n } from "vue-i18n"
+import type { SettingStorageInterface } from "@/types/setting"
+import { SETTING_DEFAULT_VALUES } from "@/constants/setting"
 import { useStorage } from "@vueuse/core"
-import { KEYS } from "@/constants/storage"
+import { createI18n } from "vue-i18n"
+import messages from "@intlify/vite-plugin-vue-i18n/messages"
 
 export default createI18n({
-    locale: useStorage(KEYS.language, "en").value, // set locale
+    locale: useStorage<SettingStorageInterface>("setting", SETTING_DEFAULT_VALUES).value.language, // set locale
     fallbackLocale: "en",
     legacy: false,
     messages, // set locale messages

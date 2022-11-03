@@ -7,6 +7,8 @@ const auth = getAuth()
 export default {
     install: () => {
         auth.onAuthStateChanged((user) => {
+            console.log("change onAuthStateChanged")
+
             if (user) {
                 register(user)
                 connectionListener(user)

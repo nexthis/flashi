@@ -31,6 +31,7 @@ export async function connectionListener(user: User) {
             //@ts-ignore
             establishConnection(user, offer.value)
         }
+        console.log("change onSnapshot")
     })
 }
 

@@ -46,6 +46,8 @@ const remember = ref<boolean>(true)
 const password = ref<string>("")
 
 const onSignIn = async () => {
+    console.log(email.value, password.value)
+
     await signInWithEmailAndPassword(auth, email.value, password.value)
     await router.push({ name: "dashboard" })
 }
@@ -58,23 +60,28 @@ const onSignIn = async () => {
     margin: auto;
     padding: 20px 30px;
 }
+
 .flex-col {
     flex-direction: column;
 }
+
 .checkbox {
     margin-left: -5px;
 }
+
 .image-box {
     position: absolute;
     left: 0;
     top: 0;
     z-index: 0;
 }
+
 .image {
     clip-path: ellipse(80% 45% at 36% 8%);
     max-width: 100%;
     height: auto;
 }
+
 .image-spacer {
     min-height: 230px;
     height: 100%;
@@ -85,9 +92,11 @@ const onSignIn = async () => {
         min-height: 190px;
     }
 }
+
 .forgot {
     position: relative;
     cursor: pointer;
+
     &::after {
         content: "";
         position: absolute;
@@ -99,6 +108,7 @@ const onSignIn = async () => {
         opacity: 0;
         transition: opacity 300ms, transform 300ms;
     }
+
     &:hover::after,
     &:focus::after {
         opacity: 1;

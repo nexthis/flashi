@@ -1,6 +1,8 @@
+import type { SettingStorageInterface } from "@/types/setting"
+import { SETTING_DEFAULT_VALUES } from "@/constants/setting"
 import { Quasar, Dialog } from "quasar"
 import { useStorage } from "@vueuse/core"
-import { KEYS } from "@/constants/storage"
+
 //font
 import "@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css"
 // Import icon libraries
@@ -15,7 +17,7 @@ import type { QuasarPluginOptions } from "quasar/dist/types/plugin"
 export const config: Partial<QuasarPluginOptions> = {
     plugins: { Dialog },
     config: {
-        dark: useStorage(KEYS.dark, true).value,
+        dark: useStorage<SettingStorageInterface>("setting", SETTING_DEFAULT_VALUES).value.dark,
     },
 }
 

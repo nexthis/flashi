@@ -10,7 +10,7 @@ import {
     DocumentReference,
 } from "firebase/firestore"
 
-// Because user can have only max 30~100 we fetch all because is cheaper ;-))
+// Because user can have only max 30~100 we fetch all because is simple but is expensive :-((
 export async function paginate(): Promise<QuerySnapshot<DocumentData>> {
     const db = getFirestore()
     const user = await getUserOrThrow()

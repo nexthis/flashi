@@ -1,30 +1,30 @@
-import { useI18n } from "vue-i18n"
-import { useQuasar } from "quasar"
+import type { SettingStorageInterface } from "@/types/setting"
+import { SETTING_DEFAULT_VALUES } from "@/constants/setting"
+import { computed } from "vue"
+import { Dark } from "quasar"
 import { useStorage } from "@vueuse/core"
-import { KEYS } from "@/constants/storage"
+import i18n from "@/plugins/i18n"
 
-//TODO: Refactor task: https://trello.com/c/N37UkTdo
 export function useSetting() {
-    const { availableLocales, locale: localeGlobal } = useI18n({ useScope: "global" })
-    const quasar = useQuasar()
+    const state = useStorage<SettingStorageInterface>("setting", SETTING_DEFAULT_VALUES)
 
-    const locale = useStorage(KEYS.language, "en")
-    const dark = useStorage(KEYS.dark, true)
+    const language = computed(() => state.value.language)
+    const isDark = computed(() => state.value.dark)
 
-    function localeChnage(lang: string) {
-        locale.value = lang
-        localeGlobal.value = lang
+    function changeLanguage(lang: SupportLanguage) {
+        i18n.global.locale.value = lang
+        state.value.language = lang
     }
 
-    function darkChnage(value: boolean) {
-        dark.value = value
-        quasar.dark.set(value)
+    function theme(dark: boolean) {
+        Dark.set(dark)
+        state.value.dark = dark
     }
 
     return {
-        availableLocales,
-        locale,
-        dark,
-        localeChnage,
+        language,
+        isDark,
+        changeLanguage,
+        theme,
     }
 }

@@ -1,0 +1,1 @@
+type SupportLanguage = "pl" | "en"

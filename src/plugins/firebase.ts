@@ -1,22 +1,42 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
-//import { initializeFirestore, CACHE_SIZE_UNLIMITED, enableIndexedDbPersistence } from "firebase/firestore"
 import { getAnalytics } from "firebase/analytics"
+
+//FOR emulate
+import { getAuth, connectAuthEmulator } from "firebase/auth"
+import { getDatabase, connectDatabaseEmulator } from "firebase/database"
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore"
+import { getStorage, connectStorageEmulator } from "firebase/storage"
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions"
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCEidKgANiGLp_egyOUppyMv06F84UoLVM",
-    authDomain: "flashi-13c9b.firebaseapp.com",
-    databaseURL: "https://flashi-13c9b-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "flashi-13c9b",
-    storageBucket: "flashi-13c9b.appspot.com",
-    messagingSenderId: "104229536375",
-    appId: "1:104229536375:web:3f9584fe4aa8f40e40bc72",
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 getAnalytics(app)
-//enableIndexedDbPersistence(initializeFirestore(app, { cacheSizeBytes: CACHE_SIZE_UNLIMITED }))
+
+if (import.meta.env.DEV && import.meta.env.VITE_FIREBASE_EMULATOR === "true") {
+    const auth = getAuth()
+    const db = getDatabase()
+    const firestore = getFirestore()
+    const storage = getStorage()
+    const functions = getFunctions(app)
+
+    connectAuthEmulator(auth, "http://localhost:9099")
+    connectDatabaseEmulator(db, "localhost", 9000)
+    connectFirestoreEmulator(firestore, "localhost", 8080)
+    connectStorageEmulator(storage, "localhost", 9199)
+    connectFunctionsEmulator(functions, "localhost", 5001)
+}
