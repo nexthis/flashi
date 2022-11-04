@@ -1,9 +1,9 @@
-import type { SettingStorageInterface } from "@/types/setting"
-import { SETTING_DEFAULT_VALUES } from "@/constants/setting"
 import { computed } from "vue"
 import { Dark } from "quasar"
 import { useStorage } from "@vueuse/core"
 import i18n from "@/plugins/i18n"
+import { SETTING_DEFAULT_VALUES } from "@/constants/setting"
+import type { SettingStorageInterface } from "@/types/setting"
 
 export function useSetting() {
     const state = useStorage<SettingStorageInterface>("setting", SETTING_DEFAULT_VALUES)

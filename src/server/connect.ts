@@ -1,11 +1,11 @@
 import { getFirestore, doc, setDoc, onSnapshot, DocumentData } from "firebase/firestore"
 import { User } from "firebase/auth"
-import { useConnection } from "@/store/useConnection"
 import { invoke } from "@tauri-apps/api/tauri"
 import { listen } from "@tauri-apps/api/event"
 import { Notify } from "quasar"
 
 import _ from "lodash"
+import { useConnection } from "@/store/useConnection"
 
 interface OfferInterface {
     value: null | undefined | DocumentData

@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { useConnection } from "@/store/useConnection"
 import { appWindow } from "@tauri-apps/api/window"
+import { useConnection } from "@/store/useConnection"
 
 const connection = useConnection()
 

@@ -1,4 +1,3 @@
-import { getUserOrThrow } from "@/utils/auth"
 import {
     getFirestore,
     collection,
@@ -9,6 +8,7 @@ import {
     DocumentData,
     DocumentReference,
 } from "firebase/firestore"
+import { getUserOrThrow } from "@/utils/auth"
 
 // Because user can have only max 30~100 we fetch all because is simple but is expensive :-((
 export async function paginate(): Promise<QuerySnapshot<DocumentData>> {

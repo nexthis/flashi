@@ -7,8 +7,8 @@
 </template>
 
 <script setup lang="ts">
-import { useSetting } from "@/composables/useSetting"
 import { useI18n } from "vue-i18n"
+import { useSetting } from "@/composables/useSetting"
 
 const { t } = useI18n()
 const { changeLanguage, isDark, language, theme } = useSetting()

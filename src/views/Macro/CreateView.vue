@@ -8,10 +8,10 @@
 </template>
 
 <script setup lang="ts">
-import { useMacroCreate } from "@/composables/queries/useMacroCreate"
 import { ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
+import { useMacroCreate } from "@/composables/queries/useMacroCreate"
 
 const { mutateAsync } = useMacroCreate()
 

@@ -1,6 +1,6 @@
+import { createRouter, createWebHashHistory } from "vue-router"
 import routes from "@/routes/modules/index"
 import { checkAuth } from "@/utils/auth"
-import { createRouter, createWebHashHistory } from "vue-router"
 
 const router = createRouter({
     // 4. Provide the history implementation to use. We are using the hash history for simplicity here.

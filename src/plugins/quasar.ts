@@ -1,7 +1,7 @@
-import type { SettingStorageInterface } from "@/types/setting"
 import { SETTING_DEFAULT_VALUES } from "@/constants/setting"
 import { Quasar, Dialog } from "quasar"
 import { useStorage } from "@vueuse/core"
+import type { SettingStorageInterface } from "@/types/setting"
 
 //font
 import "@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css"

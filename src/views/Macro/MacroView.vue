@@ -48,10 +48,10 @@
 <script setup lang="ts">
 /* globals  UserMacro*/
 import { useQuasar } from "quasar"
-import { useMacroPaginate } from "@/composables/queries/useMacroPaginate"
-import { useScript } from "@/composables/useScript"
 import { useI18n } from "vue-i18n"
 import { ref } from "vue"
+import { useScript } from "@/composables/useScript"
+import { useMacroPaginate } from "@/composables/queries/useMacroPaginate"
 
 const currentPage = ref(1)
 

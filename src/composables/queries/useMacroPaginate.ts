@@ -1,8 +1,8 @@
-import type { QuerySnapshot, DocumentData } from "firebase/firestore"
-import { paginate } from "@/queries/macro"
 import { useQuery } from "@tanstack/vue-query"
 import { computed, ref } from "vue"
 import _ from "lodash"
+import type { QuerySnapshot, DocumentData } from "firebase/firestore"
+import { paginate } from "@/queries/macro"
 
 // Because user can have only max 30~100 we fetch all because is cheaper / firebase doesn't support full pagination yet ;-))
 export function useMacroPaginate() {
