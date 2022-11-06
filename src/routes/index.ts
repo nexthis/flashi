@@ -15,9 +15,9 @@ router.beforeEach(async (to, from, next) => {
         return next()
     }
     if (!isAuth) {
-        console.log("unauth")
+        console.log("un auth")
 
-        return next({ name: "auth" })
+        return next({ name: "login" })
     }
     next()
 })

@@ -20,11 +20,16 @@
                     <q-checkbox class="checkbox text-capitalize" v-model="remember">
                         {{ t("remember") }}
                     </q-checkbox>
-                    <div class="text-primary forgot text-capitalize">{{ t("forgot") }}</div>
+                    <div>
+                        <router-link :to="{ name: 'registry' }" class="text-primary forgot text-capitalize">
+                            {{ t("register") }}
+                        </router-link>
+                        |
+                        <a class="text-primary forgot text-capitalize">{{ t("forgot") }}</a>
+                    </div>
                 </div>
 
-                <div class="q-mt-lg flex justify-between">
-                    <q-btn :to="{ name: 'dashboard' }" size="lg" color="negative">{{ t("back") }}</q-btn>
+                <div class="q-mt-lg flex justify-end">
                     <q-btn @click="onSignIn" size="lg" color="primary">{{ t("login") }}</q-btn>
                 </div>
             </q-card-section>
@@ -34,26 +39,51 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    setPersistence,
+    inMemoryPersistence,
+    AuthError,
+} from "firebase/auth"
 import { useRouter } from "vue-router"
+import { useQuasar } from "quasar"
 import { useI18n } from "vue-i18n"
 
-const { t } = useI18n()
-const auth = getAuth()
-const router = useRouter()
 const email = ref<string>("")
 const remember = ref<boolean>(true)
 const password = ref<string>("")
 
-const onSignIn = async () => {
-    console.log(email.value, password.value)
+const { t } = useI18n()
+const auth = getAuth()
+const router = useRouter()
+const quasar = useQuasar()
 
-    await signInWithEmailAndPassword(auth, email.value, password.value)
+const onSignIn = async () => {
+    if (!remember.value) {
+        await setPersistence(auth, inMemoryPersistence)
+    }
+
+    try {
+        await signInWithEmailAndPassword(auth, email.value, password.value)
+    } catch (error) {
+        const errorTyped = error as AuthError
+        quasar.notify({
+            message: t("error." + errorTyped.code),
+            // caption: errorTyped.code,
+            color: "negative",
+            position: "bottom-right",
+        })
+    }
+
     await router.push({ name: "dashboard" })
 }
 </script>
 
 <style scoped lang="scss">
+a {
+    text-decoration: none;
+}
 .card {
     max-width: 450px;
     width: 100%;
@@ -127,6 +157,13 @@ const onSignIn = async () => {
         "back": "back",
         "remember": "remember me",
         "forgot": "forgot password",
+        "register": "register",
+        "error": {
+            "auth/user-not-found": "Email or password not exist",
+            "auth/missing-email": "Email or password not exist",
+            "auth/internal-error": "Error when trying to log in",
+            "auth/wrong-password": "Email or password not exist",
+        },
     }
 
     "pl": {
@@ -137,5 +174,12 @@ const onSignIn = async () => {
         "back": "wstecz",
         "remember": "zapamiętaj mnie",
         "forgot": "zapomniałem hasła",
+        "register": "rejestracja",
+        "error": {
+            "auth/user-not-found": "Nieprawidłowy email lub hasło",
+            "auth/missing-email": "Nieprawidłowy email lub hasło",
+            "auth/internal-error": "Błąd przy próbie logowania",
+            "auth/wrong-password": "Nieprawidłowy email lub hasło",
+        },
     }
 </i18n>

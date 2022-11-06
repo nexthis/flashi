@@ -1,10 +1,10 @@
 import type { RouteRecordRaw } from "vue-router"
-import AssideLayout from "@/layouts/AssideLayout.vue"
+import AsideLayout from "@/layouts/AsideLayout.vue"
 import Account from "@/views/Account/AccountView.vue"
 
 const routes: RouteRecordRaw = {
     path: "/account",
-    component: AssideLayout,
+    component: AsideLayout,
     children: [
         {
             path: "",

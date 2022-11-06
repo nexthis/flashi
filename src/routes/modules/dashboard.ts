@@ -1,10 +1,10 @@
 import type { RouteRecordRaw } from "vue-router"
-import AssideLayout from "@/layouts/AssideLayout.vue"
+import AsideLayout from "@/layouts/AsideLayout.vue"
 import Dashboard from "@/views/Dashboard/DashboardView.vue"
 
 const routes: RouteRecordRaw = {
     path: "/",
-    component: AssideLayout,
+    component: AsideLayout,
     children: [
         {
             path: "",

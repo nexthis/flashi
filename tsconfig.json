@@ -18,7 +18,7 @@
     },
     "types": ["@intlify/vite-plugin-vue-i18n/client"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/components/CodeEditor/language/syntax.grammar"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -15,7 +15,7 @@ const { t } = useI18n()
 const onLogout = async () => {
     const auth = getAuth()
     await auth.signOut()
-    router.push({ name: "auth" })
+    router.push({ name: "login" })
 }
 </script>
 
