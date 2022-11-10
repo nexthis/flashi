@@ -1,11 +1,15 @@
 //use crate::state::GlobalState;
+use serde_json::Value;
 use std::sync::Arc;
+use tauri::async_runtime::block_on;
 use tauri::Window;
 use webrtc::api::interceptor_registry::register_default_interceptors;
 use webrtc::api::media_engine::MediaEngine;
 use webrtc::api::APIBuilder;
 use webrtc::data_channel::data_channel_message::DataChannelMessage;
 use webrtc::data_channel::RTCDataChannel;
+use webrtc::ice_transport::ice_candidate::{RTCIceCandidate, RTCIceCandidateInit};
+use webrtc::ice_transport::ice_connection_state::RTCIceConnectionState;
 use webrtc::ice_transport::ice_server::RTCIceServer;
 use webrtc::interceptor::registry::Registry;
 use webrtc::peer_connection::configuration::RTCConfiguration;
@@ -19,6 +23,8 @@ mod events;
 pub async fn connect(offer: String, window: Window) -> Result<RTCSessionDescription, String> {
     // Create a MediaEngine object to configure the supported codec
     let mut m = MediaEngine::default();
+
+    let window = Arc::new(window);
 
     // Register default codecs
     match m.register_default_codecs() {
@@ -59,17 +65,87 @@ pub async fn connect(offer: String, window: Window) -> Result<RTCSessionDescript
         Err(error) => return Err(error.to_string()),
     });
 
+    let window_ref = Arc::clone(&window);
+    let peer_connection_ref = Arc::clone(&peer_connection);
+
+    let window_event_id = window_ref.listen("remote-ice-candidate", move |event| {
+        let test = event.payload().unwrap();
+        let value: Value = serde_json::from_str(test).unwrap();
+
+        println!("text: {}", test);
+
+        println!(
+            "got window remote-ice-candidate with payload {}, {}, {}",
+            value["candidate"], value["sdpMLineIndex"], value["sdpMid"]
+        );
+
+        let peer_connection_ref = Arc::clone(&peer_connection_ref);
+
+        tauri::async_runtime::spawn(async move {
+            let result = peer_connection_ref
+                .add_ice_candidate(RTCIceCandidateInit {
+                    candidate: value["candidate"].to_string(),
+                    sdp_mid: Some(value["sdpMid"].to_string()),
+                    sdp_mline_index: value["sdpMLineIndex"].to_string().parse().ok(),
+                    username_fragment: Some("def".to_string().to_string()),
+                })
+                .await
+                .ok();
+            println!("remote-ice-candidate added: {:?}", result);
+
+            result
+        });
+    });
+
+    peer_connection
+        .on_ice_connection_state_change(Box::new(move |state| {
+            println!("on_ice_connection_state_change: {}", state);
+            if RTCIceConnectionState::Checking != state {
+                window_ref.unlisten(window_event_id);
+                println!("unlisten(window_event_id)");
+            }
+            Box::pin(async move {})
+        }))
+        .await;
+
+    let window_ref = Arc::clone(&window);
+
+    peer_connection
+        .on_ice_candidate(Box::new(move |ice_candidate: Option<RTCIceCandidate>| {
+            if ice_candidate.is_none() {
+                return Box::pin(async {});
+            }
+
+            let ice_candidate = ice_candidate.unwrap();
+            // let value = ice_candidate.;
+
+            //ice_candidate
+            println!(
+                "ICE Connection State has changed: {}",
+                ice_candidate.to_string()
+            );
+
+            let window_ref = Arc::clone(&window_ref);
+            Box::pin(async move {
+                window_ref
+                    .emit("on-ice-candidate", ice_candidate.to_json().await.unwrap())
+                    .unwrap();
+            })
+        }))
+        .await;
+
+    let window_ref = Arc::clone(&window);
     // Set the handler for Peer connection state
     // This will notify you when the peer has connected/disconnected
     peer_connection
         .on_peer_connection_state_change(Box::new(move |s: RTCPeerConnectionState| {
             //Dispach event
-            window
+            window_ref
                 .emit("peer-connection-state-change", s.to_string().to_lowercase())
                 .unwrap();
 
             //Run event
-            events::on_statu_change(s);
+            events::on_status_change(s);
 
             Box::pin(async {})
         }))
@@ -118,7 +194,7 @@ pub async fn connect(offer: String, window: Window) -> Result<RTCSessionDescript
     };
 
     // Create channel that is blocked until ICE Gathering is complete
-    let mut gather_complete = peer_connection.gathering_complete_promise().await;
+    // let mut gather_complete = peer_connection.gathering_complete_promise().await;
 
     // Sets the LocalDescription, and starts our UDP listeners
     match peer_connection.set_local_description(answer).await {
@@ -129,7 +205,7 @@ pub async fn connect(offer: String, window: Window) -> Result<RTCSessionDescript
     // Block until ICE Gathering is complete, disabling trickle ICE
     // we do this because we only can exchange one signaling message
     // in a production application you should exchange ICE Candidates via OnICECandidate
-    let _ = gather_complete.recv().await;
+    //let _ = gather_complete.recv().await;
 
     // Output the answer in base64 so we can paste it in browser
     if let Some(local_desc) = peer_connection.local_description().await {

@@ -1,7 +1,8 @@
-import { getFirestore, doc, setDoc, onSnapshot, DocumentData } from "firebase/firestore"
+import { getAuth } from "firebase/auth"
+import { getFirestore, doc, collection, addDoc, setDoc, onSnapshot, DocumentData } from "firebase/firestore"
 import { User } from "firebase/auth"
 import { invoke } from "@tauri-apps/api/tauri"
-import { listen } from "@tauri-apps/api/event"
+import { emit, listen } from "@tauri-apps/api/event"
 import { Notify } from "quasar"
 
 import _ from "lodash"
@@ -17,9 +18,9 @@ const db = getFirestore()
 const offer: OfferInterface = { value: null, isInit: false }
 
 export async function connectionListener(user: User) {
-    const q = doc(db, "users", user.uid, "connection_pool", "offer")
+    const connectionPool = doc(db, "users", user.uid, "connection_pool", "offer")
 
-    onSnapshot(q, (snapshot) => {
+    onSnapshot(connectionPool, (snapshot) => {
         if (!offer.isInit) {
             offer.value = snapshot.data()
             offer.isInit = true
@@ -32,6 +33,21 @@ export async function connectionListener(user: User) {
             establishConnection(user, offer.value)
         }
         console.log("change onSnapshot")
+    })
+
+    const offerCandidates = collection(db, "users", user.uid, "offer_candidates")
+    onSnapshot(offerCandidates, (snapshot) => {
+        snapshot.docChanges().forEach(async (type) => {
+            if (type.type === "added") {
+                const ice = type.doc.data() as RTCIceCandidateInterface
+                console.log(ice)
+                emit("remote-ice-candidate", {
+                    candidate: ice.candidate,
+                    sdpMLineIndex: ice.sdpMLineIndex,
+                    sdpMid: ice.sdpMid,
+                })
+            }
+        })
     })
 }
 
@@ -56,3 +72,13 @@ listen<RTCPeerConnectionState>("peer-connection-state-change", (s) => {
         connection.disconnect()
     }
 })
+
+listen<RTCIceCandidateInterface>("on-ice-candidate", (event) => {
+    const auth = getAuth()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const user = auth.currentUser!
+    addDoc(collection(db, "users", user.uid, "answer_candidates"), {
+        ...event.payload,
+    })
+})
+//candidate:842163049 1 udp 1677729535 37.47.225.160 24504 typ srflx raddr 0.0.0.0 rport 0 generation 0 ufrag 1/u9 network-cost 999
