@@ -97,81 +97,71 @@ pub async fn connect(offer: String, window: Window) -> Result<RTCSessionDescript
         });
     });
 
-    peer_connection
-        .on_ice_connection_state_change(Box::new(move |state| {
-            println!("on_ice_connection_state_change: {}", state);
-            if RTCIceConnectionState::Checking != state {
-                window_ref.unlisten(window_event_id);
-                println!("unlisten(window_event_id)");
-            }
-            Box::pin(async move {})
-        }))
-        .await;
+    peer_connection.on_ice_connection_state_change(Box::new(move |state| {
+        println!("on_ice_connection_state_change: {}", state);
+        if RTCIceConnectionState::Checking != state {
+            window_ref.unlisten(window_event_id);
+            println!("unlisten(window_event_id)");
+        }
+        Box::pin(async move {})
+    }));
 
     let window_ref = Arc::clone(&window);
 
-    peer_connection
-        .on_ice_candidate(Box::new(move |ice_candidate: Option<RTCIceCandidate>| {
-            if ice_candidate.is_none() {
-                return Box::pin(async {});
-            }
+    peer_connection.on_ice_candidate(Box::new(move |ice_candidate: Option<RTCIceCandidate>| {
+        if ice_candidate.is_none() {
+            return Box::pin(async {});
+        }
 
-            let ice_candidate = ice_candidate.unwrap();
-            // let value = ice_candidate.;
+        let ice_candidate = ice_candidate.unwrap();
+        // let value = ice_candidate.;
 
-            //ice_candidate
-            println!(
-                "ICE Connection State has changed: {}",
-                ice_candidate.to_string()
-            );
+        //ice_candidate
+        println!(
+            "ICE Connection State has changed: {}",
+            ice_candidate.to_string()
+        );
 
-            let window_ref = Arc::clone(&window_ref);
-            Box::pin(async move {
-                window_ref
-                    .emit("on-ice-candidate", ice_candidate.to_json().await.unwrap())
-                    .unwrap();
-            })
-        }))
-        .await;
+        window_ref
+            .emit("on-ice-candidate", ice_candidate.to_json().unwrap())
+            .unwrap();
+            
+        Box::pin(async move {})
+    }));
 
     let window_ref = Arc::clone(&window);
     // Set the handler for Peer connection state
     // This will notify you when the peer has connected/disconnected
-    peer_connection
-        .on_peer_connection_state_change(Box::new(move |s: RTCPeerConnectionState| {
-            //Dispach event
-            window_ref
-                .emit("peer-connection-state-change", s.to_string().to_lowercase())
-                .unwrap();
+    peer_connection.on_peer_connection_state_change(Box::new(move |s: RTCPeerConnectionState| {
+        //Dispach event
+        window_ref
+            .emit("peer-connection-state-change", s.to_string().to_lowercase())
+            .unwrap();
 
-            //Run event
-            events::on_status_change(s);
+        //Run event
+        events::on_status_change(s);
 
-            Box::pin(async {})
-        }))
-        .await;
+        Box::pin(async {})
+    }));
 
     // Register data channel creation handling
-    peer_connection
-        .on_data_channel(Box::new(move |d: Arc<RTCDataChannel>| {
-            let d_label = d.label().to_owned();
-            let d_id = d.id();
-            println!("New DataChannel {} {}", d_label, d_id);
+    peer_connection.on_data_channel(Box::new(move |d: Arc<RTCDataChannel>| {
+        let d_label = d.label().to_owned();
+        let d_id = d.id();
+        println!("New DataChannel {} {}", d_label, d_id);
 
-            // Register channel opening handling
-            Box::pin(async move {
-                let d2 = Arc::clone(&d);
+        // Register channel opening handling
+        Box::pin(async move {
+            let d2 = Arc::clone(&d);
 
-                // Register text message handling
-                d.on_message(Box::new(move |msg: DataChannelMessage| {
-                    //Run event
-                    events::on_message(msg, &d2);
-                    Box::pin(async {})
-                }))
-                .await;
-            })
-        }))
-        .await;
+            // Register text message handling
+            d.on_message(Box::new(move |msg: DataChannelMessage| {
+                //Run event
+                events::on_message(msg, &d2);
+                Box::pin(async {})
+            }));
+        })
+    }));
 
     let offer = match serde_json::from_str::<RTCSessionDescription>(offer.as_str()) {
         Ok(val) => val,

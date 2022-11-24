@@ -63,7 +63,6 @@ const onSignIn = async () => {
     if (!remember.value) {
         await setPersistence(auth, inMemoryPersistence)
     }
-
     try {
         await signInWithEmailAndPassword(auth, email.value, password.value)
     } catch (error) {

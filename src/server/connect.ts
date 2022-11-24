@@ -1,63 +1,92 @@
 import { getAuth } from "firebase/auth"
-import { getFirestore, doc, collection, addDoc, setDoc, onSnapshot, DocumentData } from "firebase/firestore"
 import { User } from "firebase/auth"
 import { invoke } from "@tauri-apps/api/tauri"
 import { emit, listen } from "@tauri-apps/api/event"
 import { Notify } from "quasar"
-
-import _ from "lodash"
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    onSnapshot,
+    query,
+    where,
+    Timestamp,
+    serverTimestamp,
+} from "firebase/firestore"
 import { useConnection } from "@/store/useConnection"
 
-interface OfferInterface {
-    value: null | undefined | DocumentData
-    isInit: boolean
-}
-
+//Global values
 const db = getFirestore()
+let clientKey = ""
+let serverKey = ""
 
-const offer: OfferInterface = { value: null, isInit: false }
+export async function connectionListener(user: User, device: DeviceInterface) {
+    console.log("connectionListener")
+    const q = query(
+        collection(db, "users", user.uid, "server"),
+        where("server", "==", device.key),
+        where("createdAt", ">", Timestamp.now())
+    )
 
-export async function connectionListener(user: User) {
-    const connectionPool = doc(db, "users", user.uid, "connection_pool", "offer")
+    serverKey = device.key
 
-    onSnapshot(connectionPool, (snapshot) => {
-        if (!offer.isInit) {
-            offer.value = snapshot.data()
-            offer.isInit = true
+    const onOffer = (offer: RTCConnectionMarkInterface) => {
+        if (offer.type === "answer") {
+            console.log("onOffer: type is answer")
             return
         }
-        offer.value = snapshot.data()
-        if (_.has(offer, "value.sdp") && _.has(offer, "value.type")) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-ignore
-            establishConnection(user, offer.value)
-        }
-        console.log("change onSnapshot")
-    })
+        //add client key
+        clientKey = offer.client
+        establishConnection(user, offer)
+    }
 
-    const offerCandidates = collection(db, "users", user.uid, "offer_candidates")
-    onSnapshot(offerCandidates, (snapshot) => {
-        snapshot.docChanges().forEach(async (type) => {
-            if (type.type === "added") {
-                const ice = type.doc.data() as RTCIceCandidateInterface
-                console.log(ice)
-                emit("remote-ice-candidate", {
-                    candidate: ice.candidate,
-                    sdpMLineIndex: ice.sdpMLineIndex,
-                    sdpMid: ice.sdpMid,
-                })
-            }
+    const onIce = (ice: RTCIceCandidateInterface) => {
+        console.log("Add Ice Candidate")
+
+        emit("remote-ice-candidate", {
+            candidate: ice.candidate,
+            sdpMLineIndex: ice.sdpMLineIndex,
+            sdpMid: ice.sdpMid,
         })
+    }
+
+    onSnapshot(q, (snapshot) => {
+        const changes = snapshot.docChanges()
+        for (const item of changes) {
+            if (item.type !== "added") {
+                console.log("connectionListener: " + item.type)
+                break
+            }
+            const data = item.doc.data()
+
+            switch (data.type) {
+                case "offer":
+                    console.log("connectionListener: " + item.type, data)
+                    onOffer(data as RTCConnectionMarkInterface)
+                    break
+                case "ice":
+                    onIce(data as RTCIceCandidateInterface)
+                    break
+                default:
+                    console.log("connectionListener: Not identified type", data)
+                    break
+            }
+        }
     })
 }
 
-async function establishConnection(user: User, offer: { sdp: string; type: "offer" }) {
+async function establishConnection(user: User, offer: { sdp: string; type: string }) {
     try {
         const result = await invoke<{ sdp: string; type: string }>("connect", {
             offer: JSON.stringify(offer),
         })
 
-        await setDoc(doc(db, "users", user.uid, "connection_pool", "answer"), result)
+        await addDoc(collection(db, "users", user.uid, "client"), {
+            ...result,
+            server: serverKey,
+            client: clientKey,
+            createdAt: serverTimestamp(),
+        })
     } catch (err) {
         Notify.create({ color: "negative", message: "Connection fails ", position: "bottom-right" })
     }
@@ -77,8 +106,12 @@ listen<RTCIceCandidateInterface>("on-ice-candidate", (event) => {
     const auth = getAuth()
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const user = auth.currentUser!
-    addDoc(collection(db, "users", user.uid, "answer_candidates"), {
+    addDoc(collection(db, "users", user.uid, "client"), {
         ...event.payload,
+        server: serverKey,
+        client: clientKey,
+        type: "ice",
+        createdAt: serverTimestamp(),
     })
 })
 //candidate:842163049 1 udp 1677729535 37.47.225.160 24504 typ srflx raddr 0.0.0.0 rport 0 generation 0 ufrag 1/u9 network-cost 999

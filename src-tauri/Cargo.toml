@@ -18,11 +18,12 @@ tauri-build = { version = "1.2.0", features = [] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.2.0", features = ["api-all", "system-tray"] }
-webrtc = "0.5"
-regex = "1.6.0"
+webrtc = "0.6"
 duckscript = "0.7.4"
 duckscriptsdk = "0.8.14"
 enigo = "0.0.14"
+machineid-rs = "1.2.1"
+sysinfo = "0.26.7"
 
 [features]
 # by default Tauri runs in production mode

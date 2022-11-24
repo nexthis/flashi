@@ -6,12 +6,12 @@ const auth = getAuth()
 
 export default {
     install: () => {
-        auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged(async (user) => {
             console.log("change onAuthStateChanged")
 
             if (user) {
-                register(user)
-                connectionListener(user)
+                const device = await register(user)
+                connectionListener(user, device)
             } else {
                 //TODO: unregister
             }
