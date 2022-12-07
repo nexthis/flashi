@@ -8,6 +8,13 @@ const db = getFirestore()
 export async function register(user: User): Promise<DeviceInterface> {
     const result = await invoke<DeviceInterface>("registry")
     const document = doc(db, "users", user.uid, "devices", result.key)
-    setDoc(document, result, { merge: true })
+    setDoc(
+        document,
+        {
+            ...result,
+            type: "server",
+        },
+        { merge: true }
+    )
     return result
 }

@@ -13,6 +13,7 @@ import {
     Timestamp,
     serverTimestamp,
 } from "firebase/firestore"
+
 import { useConnection } from "@/store/useConnection"
 
 //Global values
@@ -31,10 +32,6 @@ export async function connectionListener(user: User, device: DeviceInterface) {
     serverKey = device.key
 
     const onOffer = (offer: RTCConnectionMarkInterface) => {
-        if (offer.type === "answer") {
-            console.log("onOffer: type is answer")
-            return
-        }
         //add client key
         clientKey = offer.client
         establishConnection(user, offer)
@@ -80,6 +77,8 @@ async function establishConnection(user: User, offer: { sdp: string; type: strin
         const result = await invoke<{ sdp: string; type: string }>("connect", {
             offer: JSON.stringify(offer),
         })
+
+        console.log(`add answer: `, result)
 
         await addDoc(collection(db, "users", user.uid, "client"), {
             ...result,

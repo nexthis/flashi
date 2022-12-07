@@ -34,7 +34,7 @@ if (import.meta.env.DEV && import.meta.env.VITE_FIREBASE_EMULATOR === "true") {
     const storage = getStorage()
     const functions = getFunctions(app)
 
-    connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true })
+    connectAuthEmulator(auth, "http://localhost:9099") //, { disableWarnings: true }
     connectDatabaseEmulator(db, "localhost", 9000)
     connectFirestoreEmulator(firestore, "localhost", 8080)
     connectStorageEmulator(storage, "localhost", 9199)

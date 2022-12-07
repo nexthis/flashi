@@ -17,7 +17,7 @@ tauri-build = { version = "1.2.0", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.2.0", features = ["api-all", "system-tray"] }
+tauri = { version = "1.2.1", features = ["api-all", "system-tray"] }
 webrtc = "0.6"
 duckscript = "0.7.4"
 duckscriptsdk = "0.8.14"

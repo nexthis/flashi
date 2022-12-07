@@ -1,5 +1,6 @@
 import { getAuth } from "firebase/auth"
 import { connectionListener } from "./connect"
+import { statusListener } from "./status"
 import { register } from "./registerDevice"
 
 const auth = getAuth()
@@ -12,6 +13,7 @@ export default {
             if (user) {
                 const device = await register(user)
                 connectionListener(user, device)
+                statusListener(user, device)
             } else {
                 //TODO: unregister
             }

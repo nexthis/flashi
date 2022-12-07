@@ -15,7 +15,7 @@ onMounted(() => {
         extensions: [
             basicSetup,
             EditorView.updateListener.of((value) => {
-                console.log(value.state.doc.text)
+                //console.log(value.state.doc.text)
             }),
         ],
         parent: editorRef.value,
