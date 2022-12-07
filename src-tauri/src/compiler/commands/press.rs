@@ -1,3 +1,6 @@
+use std::thread;
+use std::time::Duration;
+
 use duckscript::types::command::Command;
 use duckscript::types::command::CommandResult;
 use enigo::{Enigo, Key, KeyboardControllable};
@@ -22,9 +25,12 @@ impl Command for Press {
             None => return CommandResult::Error("Value is requared".to_string()),
         };
 
-        println!("Key::Layout: {}", target.chars().nth(0).unwrap());
+        let key = target.chars().nth(0).unwrap();
+        println!("Key::Layout: {}", key);
 
-        enigo.key_click(Key::Layout(target.chars().nth(0).unwrap()));
+        enigo.key_down(Key::Layout(key));
+        thread::sleep(Duration::from_secs(1));
+        enigo.key_up(Key::Layout(key));
         //Key::Layout(())
         CommandResult::Continue(Some("true".to_string()))
     }
@@ -33,5 +39,3 @@ impl Command for Press {
 pub fn create() -> Box<Press> {
     Box::new(Press {})
 }
-
-
