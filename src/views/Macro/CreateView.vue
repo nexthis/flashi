@@ -2,9 +2,10 @@
     <div class="flex column full-height">
         <div class="flex items-center justify-between">
             <div class="text-h2">{{ t("title") }}</div>
+            <q-btn @click="onModifier" color="primary">Create</q-btn>
         </div>
         <div ref="editor" class="flex-1">
-            <code-editor />
+            <code-editor v-model="code" />
         </div>
     </div>
 </template>

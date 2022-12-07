@@ -5,7 +5,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { EditorView, basicSetup } from "codemirror"
+import { EXAMPLE } from "flashi-language"
+import { oneDark } from "@codemirror/theme-one-dark"
 //import { EditorState } from "@codemirror/state"
+
+const emit = defineEmits(["update:modelValue"])
 
 const editorRef = ref()
 let editor: EditorView
@@ -15,11 +19,16 @@ onMounted(() => {
         extensions: [
             basicSetup,
             EditorView.updateListener.of((value) => {
-                //console.log(value.state.doc.text)
+                console.log(value.state.doc.toString())
+                emit("update:modelValue", value.state.doc.toString())
             }),
+            EXAMPLE(),
+            oneDark,
         ],
         parent: editorRef.value,
     })
+
+    //editor.se
 })
 </script>
 
