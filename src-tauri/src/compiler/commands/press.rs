@@ -28,9 +28,7 @@ impl Command for Press {
         let key = target.chars().nth(0).unwrap();
         println!("Key::Layout: {}", key);
 
-        enigo.key_down(Key::Layout(key));
-        thread::sleep(Duration::from_secs(1));
-        enigo.key_up(Key::Layout(key));
+        enigo.key_sequence("Hello World! here is a lot of text  ❤️");
         //Key::Layout(())
         CommandResult::Continue(Some("true".to_string()))
     }
