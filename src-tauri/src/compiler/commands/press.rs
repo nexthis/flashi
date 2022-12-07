@@ -22,7 +22,9 @@ impl Command for Press {
             None => return CommandResult::Error("Value is requared".to_string()),
         };
 
-        enigo.key_down(Key::Layout(target.chars().nth(0).unwrap()));
+        println!("Key::Layout: {}", target.chars().nth(0).unwrap());
+
+        enigo.key_click(Key::Layout(target.chars().nth(0).unwrap()));
         //Key::Layout(())
         CommandResult::Continue(Some("true".to_string()))
     }
@@ -31,3 +33,5 @@ impl Command for Press {
 pub fn create() -> Box<Press> {
     Box::new(Press {})
 }
+
+
