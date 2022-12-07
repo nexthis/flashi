@@ -21,9 +21,9 @@ tauri = { version = "1.2.1", features = ["api-all", "system-tray"] }
 webrtc = "0.6"
 duckscript = "0.7.4"
 duckscriptsdk = "0.8.14"
-enigo = "0.0.14"
 machineid-rs = "1.2.1"
 sysinfo = "0.26.7"
+rdev = "0.5.2"
 
 [features]
 # by default Tauri runs in production mode
