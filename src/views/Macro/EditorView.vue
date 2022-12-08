@@ -1,6 +1,6 @@
 <template>
     <div class="flex column full-height">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between bar">
             <div @click="isNameEdit = true" v-show="!isNameEdit" class="text-h4 text-grey">
                 {{ name }}
             </div>
@@ -8,6 +8,7 @@
                 v-model="name"
                 v-show="isNameEdit"
                 @keypress.enter="isNameEdit = false"
+                @blur="isNameEdit = false"
                 borderless
                 input-class="text-h4"
             />
@@ -73,6 +74,9 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .flex-1 {
     flex: 1;
+}
+.bar {
+    height: 56px;
 }
 </style>
 
