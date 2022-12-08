@@ -23,7 +23,7 @@
                     <q-btn color="accent" round>
                         <q-icon name="mdi-eye" />
                     </q-btn>
-                    <q-btn color="accent" round>
+                    <q-btn color="accent" @click="onEdit(item)" round>
                         <q-icon name="mdi-pencil" />
                     </q-btn>
                     <q-btn color="accent" @click="onRun(item)" round>
@@ -50,26 +50,34 @@
 import { useQuasar } from "quasar"
 import { useI18n } from "vue-i18n"
 import { ref } from "vue"
+import { useRouter } from "vue-router"
 import { useScript } from "@/composables/useScript"
 import { useMacroPaginate } from "@/composables/queries/useMacroPaginate"
+import { useMacroRemove } from "@/composables/queries/useMacroRemove"
 
 const currentPage = ref(1)
 
 const { t } = useI18n()
 const quasar = useQuasar()
+const routes = useRouter()
 const { data, isLoading, page } = useMacroPaginate()
+const { mutate } = useMacroRemove()
 const { run } = useScript()
 
-const onDelete = async (value: UserMacro) => {
+const onDelete = (value: UserMacro) => {
     quasar
         .dialog({
             title: t("delete.title"),
             message: t("delete.message"),
             cancel: true,
         })
-        .onOk(async () => {
-            console.log(value)
+        .onOk(() => {
+            mutate(value)
         })
+}
+
+const onEdit = (value: UserMacro) => {
+    routes.push({ name: "macro.editor", params: { id: value.uuid } })
 }
 
 const onRun = async (value: UserMacro) => {

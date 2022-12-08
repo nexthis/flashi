@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/vue-query"
 import { computed, ref } from "vue"
 import _ from "lodash"
 import type { QuerySnapshot, DocumentData } from "firebase/firestore"
-import { paginate } from "@/queries/macro"
+import { all } from "@/queries/macro"
 
 // Because user can have only max 30~100 we fetch all because is cheaper / firebase doesn't support full pagination yet ;-))
 export function useMacroPaginate() {
@@ -10,25 +10,21 @@ export function useMacroPaginate() {
     const currentPage = ref(1)
     const max = ref(0)
 
-    const query = useQuery<QuerySnapshot<DocumentData>, Error, Paginate<UserMacro>>(
-        [paginate.key],
-        paginate,
-        {
-            select: (request) => {
-                const items = request.docs.map((item) => ({ uuid: item.id, ...item.data() }))
-                const result = {
-                    data: items,
-                    max: request.docs.length,
-                    next: false,
-                    previous: 1,
-                } as Paginate<UserMacro>
+    const query = useQuery<QuerySnapshot<DocumentData>, Error, Paginate<UserMacro>>([all.key], all, {
+        select: (request) => {
+            const items = request.docs.map((item) => ({ uuid: item.id, ...item.data() }))
+            const result = {
+                data: items,
+                max: request.docs.length,
+                next: false,
+                previous: 1,
+            } as Paginate<UserMacro>
 
-                data.value = result
-                return result
-            },
-            staleTime: 1000 * 60 * 1,
-        }
-    )
+            data.value = result
+            return result
+        },
+        staleTime: 1000 * 60 * 2,
+    })
 
     const pagginate = (): Paginate<UserMacro> => {
         const result = _.chunk(data.value?.data, 4)

@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/vue-query"
-import { create, all } from "@/queries/macro"
+import { remove, all } from "@/queries/macro"
 
-export function useMacroCreate() {
+export function useMacroRemove() {
     const queryClient = useQueryClient()
 
-    const mutation = useMutation(create, {
+    const mutation = useMutation(remove, {
         onSuccess: () => {
+            //queryClient.
             queryClient.invalidateQueries([all.key])
         },
     })

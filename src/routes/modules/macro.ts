@@ -1,7 +1,7 @@
 import type { RouteRecordRaw } from "vue-router"
 import AsideLayout from "@/layouts/AsideLayout.vue"
 import Macro from "@/views/Macro/MacroView.vue"
-import Create from "@/views/Macro/CreateView.vue"
+import Editor from "@/views/Macro/EditorView.vue"
 
 const routes: RouteRecordRaw = {
     path: "/macro",
@@ -13,9 +13,14 @@ const routes: RouteRecordRaw = {
             component: Macro,
         },
         {
-            path: "create",
+            path: "editor",
             name: "macro.create",
-            component: Create,
+            component: Editor,
+        },
+        {
+            path: "editor/:id",
+            name: "macro.editor",
+            component: Editor,
         },
     ],
 }

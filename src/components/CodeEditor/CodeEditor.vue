@@ -7,8 +7,10 @@ import { onMounted, ref } from "vue"
 import { EditorView, basicSetup } from "codemirror"
 import { EXAMPLE } from "flashi-language"
 import { oneDark } from "@codemirror/theme-one-dark"
+import { ChangeSet } from "@codemirror/state"
 //import { EditorState } from "@codemirror/state"
 
+const props = defineProps<{ modelValue: string | undefined }>()
 const emit = defineEmits(["update:modelValue"])
 
 const editorRef = ref()
@@ -19,16 +21,17 @@ onMounted(() => {
         extensions: [
             basicSetup,
             EditorView.updateListener.of((value) => {
-                console.log(value.state.doc.toString())
+                //https://www.raresportan.com/how-to-make-a-code-editor-with-codemirror6/ Listen for Changes
                 emit("update:modelValue", value.state.doc.toString())
             }),
             EXAMPLE(),
             oneDark,
         ],
         parent: editorRef.value,
+        doc: props.modelValue,
     })
 
-    //editor.se
+    ///editor.state.doc.
 })
 </script>
 

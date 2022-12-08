@@ -23,7 +23,7 @@
                 </router-link>
             </div>
         </div>
-        <div class="content">
+        <div class="content aside-content">
             <router-view />
         </div>
     </q-page>

@@ -10,7 +10,6 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const isAuth = await checkAuth()
-
     if (to.meta?.auth === false) {
         return next()
     }
@@ -19,7 +18,8 @@ router.beforeEach(async (to, from, next) => {
 
         return next({ name: "login" })
     }
-    next()
+
+    return next()
 })
 
 export default router
