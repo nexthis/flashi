@@ -1,3 +1,4 @@
+use duckscript;
 use duckscript::runner;
 use duckscript::types;
 use duckscript::types::error::ScriptError;
@@ -38,6 +39,7 @@ mod tests {
             press A 
             press A 
             press A 
+            move 50.54 50 
         "#;
 
         let now = Instant::now();
