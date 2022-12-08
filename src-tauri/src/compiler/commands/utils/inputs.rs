@@ -4,7 +4,7 @@ use std::thread;
 use rdev::{simulate, EventType, Key};
 
 pub fn send(event_type: &EventType) {
-    let delay = time::Duration::from_millis(20);
+    //let delay = time::Duration::from_millis(20);
     match simulate(event_type) {
         Ok(()) => (),
         Err(SimulateError) => {
@@ -12,7 +12,7 @@ pub fn send(event_type: &EventType) {
         }
     }
     // Let ths OS catchup (at least MacOS)
-    thread::sleep(delay);
+    //thread::sleep(delay);
 }
 
 pub fn key_to_keycode(key: &String) -> Key {

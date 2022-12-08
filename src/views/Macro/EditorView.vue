@@ -1,7 +1,7 @@
 <template>
     <div class="flex column full-height">
         <div class="flex items-center justify-between">
-            <div @dblclick="isNameEdit = true" v-show="!isNameEdit" class="text-h4 text-grey">
+            <div @click="isNameEdit = true" v-show="!isNameEdit" class="text-h4 text-grey">
                 {{ name }}
             </div>
             <q-input
