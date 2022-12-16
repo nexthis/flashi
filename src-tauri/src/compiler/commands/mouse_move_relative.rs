@@ -1,16 +1,14 @@
+use super::utils::inputs::send;
 use duckscript::types::command::Command;
 use duckscript::types::command::CommandResult;
-use rdev::{simulate, Button, EventType, Key, SimulateError};
-use std::{thread, time};
-
-use super::utils::inputs::send;
+use enigo::{Enigo, MouseButton, MouseControllable};
 
 #[derive(Clone)]
-pub struct MouseMove {}
+pub struct MouseMoveRelative {}
 
-impl Command for MouseMove {
+impl Command for MouseMoveRelative {
     fn name(&self) -> String {
-        "move".to_string()
+        "move_relative".to_string()
     }
 
     fn clone_and_box(&self) -> Box<dyn Command> {
@@ -38,14 +36,19 @@ impl Command for MouseMove {
             Err(_) => return CommandResult::Error("Value Y has wrong format".to_string()),
         };
 
-        println!("value: {} - {}", x, y);
-        send(&EventType::MouseMove { x, y });
-        // send(&EventType::KeyRelease(key));
-        // //Key::Layout(())
+        let mut enigo = Enigo::new();
+        enigo.mouse_move_relative(x.round() as i32, y.round() as i32);
+
+        //send(&EventType::MouseMove { x, y });
+
         CommandResult::Continue(Some("true".to_string()))
     }
 }
 
-pub fn create() -> Box<MouseMove> {
-    Box::new(MouseMove {})
+pub fn create() -> Box<MouseMoveRelative> {
+    Box::new(MouseMoveRelative {})
+}
+
+fn currency_double_to_int(amount: f64) -> i64 {
+    (amount * 100.0).round() as i64
 }

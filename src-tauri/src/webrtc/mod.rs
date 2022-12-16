@@ -225,3 +225,9 @@ impl WebRtc {
 
     pub fn disconnect() {}
 }
+
+impl Drop for WebRtc {
+    fn drop(&mut self) {
+        println!("Drop !!!!!!!!!!!!!!!!!!!");
+    }
+}
