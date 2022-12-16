@@ -144,7 +144,6 @@ dependencies = [
  "duckscript",
  "duckscriptsdk",
  "enigo",
- "internal",
  "machineid-rs",
  "rdev",
  "serde",
@@ -2200,14 +2199,6 @@ dependencies = [
  "waitgroup",
  "webrtc-srtp",
  "webrtc-util",
-]
-
-[[package]]
-name = "internal"
-version = "0.1.0"
-dependencies = [
- "cc",
- "cty",
 ]
 
 [[package]]
