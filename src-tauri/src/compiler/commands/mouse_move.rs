@@ -1,7 +1,6 @@
 use duckscript::types::command::Command;
 use duckscript::types::command::CommandResult;
 use rdev::{simulate, Button, EventType, Key, SimulateError};
-use std::{thread, time};
 
 use super::utils::inputs::send;
 
