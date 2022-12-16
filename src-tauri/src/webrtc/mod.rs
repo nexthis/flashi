@@ -2,7 +2,7 @@
 use serde_json::Value;
 use std::sync::Arc;
 use tauri::async_runtime::block_on;
-use tauri::Window;
+use tauri::{window, Window};
 use webrtc::api::interceptor_registry::register_default_interceptors;
 use webrtc::api::media_engine::MediaEngine;
 use webrtc::api::APIBuilder;
@@ -23,8 +23,9 @@ mod events;
 #[tauri::command]
 pub async fn connect(
     offer: String,
-    web_rtc: tauri::State<'_, WebRtc>,
+    window: tauri::Window,
 ) -> Result<RTCSessionDescription, String> {
+    let web_rtc = WebRtc::init(window).await;
     web_rtc.create_answer(offer).await
 }
 
@@ -172,12 +173,14 @@ impl WebRtc {
             })
         }));
 
-        WebRtc {
-            peer_connection,
-        }
+        WebRtc { peer_connection }
     }
 
     pub async fn create_answer(&self, offer: String) -> Result<RTCSessionDescription, String> {
+        //self.peer_connection.disc
+        //self.peer_connection.current_remote_description().await;
+        //self.peer_connection.
+
         let offer = match serde_json::from_str::<RTCSessionDescription>(offer.as_str()) {
             Ok(val) => val,
             Err(error) => {

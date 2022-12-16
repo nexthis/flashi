@@ -78,14 +78,21 @@ async function establishConnection(user: User, offer: { sdp: string; type: strin
             offer: JSON.stringify(offer),
         })
 
-        console.log(`add answer: `, result)
-
         await addDoc(collection(db, "users", user.uid, "client"), {
             ...result,
             server: serverKey,
             client: clientKey,
             createdAt: serverTimestamp(),
         })
+        // setTimeout(async () => {
+        //     console.log(`add answer: `, result)
+        //     await addDoc(collection(db, "users", user.uid, "client"), {
+        //         ...result,
+        //         server: serverKey,
+        //         client: clientKey,
+        //         createdAt: serverTimestamp(),
+        //     })
+        // }, 5000)
     } catch (err) {
         Notify.create({ color: "negative", message: "Connection fails ", position: "bottom-right" })
     }
