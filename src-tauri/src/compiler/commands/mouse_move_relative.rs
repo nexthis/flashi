@@ -1,7 +1,9 @@
 use super::utils::inputs::send;
 use duckscript::types::command::Command;
 use duckscript::types::command::CommandResult;
-use enigo::{Enigo, MouseButton, MouseControllable};
+
+use internal::geometry::Point;
+use internal::mouse::move_relative;
 
 #[derive(Clone)]
 pub struct MouseMoveRelative {}
@@ -36,8 +38,7 @@ impl Command for MouseMoveRelative {
             Err(_) => return CommandResult::Error("Value Y has wrong format".to_string()),
         };
 
-        let mut enigo = Enigo::new();
-        enigo.mouse_move_relative(x.round() as i32, y.round() as i32);
+        move_relative(Point { x, y });
 
         //send(&EventType::MouseMove { x, y });
 

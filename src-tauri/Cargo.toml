@@ -25,7 +25,7 @@ machineid-rs = "1.2.1"
 sysinfo = "0.26.7"
 rdev = "0.5.2"
 enigo = "0.0.14"
-#internal = { path = "../src-internal" }
+internal = { path = "../src-internal" }
 
 [features]
 # by default Tauri runs in production mode

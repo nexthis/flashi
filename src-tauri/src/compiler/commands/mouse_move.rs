@@ -1,8 +1,9 @@
+use super::utils::inputs::send;
 use duckscript::types::command::Command;
 use duckscript::types::command::CommandResult;
-use rdev::{simulate, Button, EventType, Key, SimulateError};
 
-use super::utils::inputs::send;
+use internal::geometry::Point;
+use internal::mouse::move_to;
 
 #[derive(Clone)]
 pub struct MouseMove {}
@@ -38,9 +39,7 @@ impl Command for MouseMove {
         };
 
         println!("value: {} - {}", x, y);
-        send(&EventType::MouseMove { x, y });
-        // send(&EventType::KeyRelease(key));
-        // //Key::Layout(())
+        move_to(Point { x, y });
         CommandResult::Continue(Some("true".to_string()))
     }
 }
