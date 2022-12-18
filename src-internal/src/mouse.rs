@@ -121,12 +121,8 @@ pub fn move_to(point: Point) -> Result<(), MouseError> {
 ///
 /// Returns `MouseError` if coordinate is outside the screen boundaries.
 pub fn move_relative(point: Point) -> Result<(), MouseError> {
-    if !screen::is_point_visible(point) {
-        Err(MouseError::OutOfBounds)
-    } else {
-        system_move_relative(point);
-        Ok(())
-    }
+    system_move_relative(point);
+    Ok(())
 }
 
 /// Returns the current position of the mouse cursor.
@@ -238,10 +234,37 @@ fn system_move_to(point: Point) {
 
 #[cfg(windows)]
 fn system_move_relative(point: Point) {
-    use winapi::ctypes::c_int;
-    use winapi::um::winuser::{mouse_event, MOUSEEVENTF_MOVE};
+    use winapi::um::winuser::MOUSEEVENTF_MOVE;
+
     let scaled_point = point.scaled(screen::scale()).round();
-    mouse_event(MOUSEEVENTF_MOVE, 0, x as i32, y as i32);
+
+    mouse_event(
+        MOUSEEVENTF_MOVE,
+        0,
+        scaled_point.x as i32,
+        scaled_point.y as i32,
+    );
+}
+
+#[cfg(windows)]
+fn mouse_event(flags: u32, data: u32, dx: i32, dy: i32) {
+    use std::mem::*;
+    use winapi::ctypes::c_int;
+    use winapi::um::winuser::*;
+    let mut input = INPUT {
+        type_: INPUT_MOUSE,
+        u: unsafe {
+            transmute(MOUSEINPUT {
+                dx,
+                dy,
+                mouseData: data,
+                dwFlags: flags,
+                time: 0,
+                dwExtraInfo: 0,
+            })
+        },
+    };
+    unsafe { SendInput(1, &mut input as LPINPUT, size_of::<INPUT>() as c_int) };
 }
 
 #[cfg(windows)]
