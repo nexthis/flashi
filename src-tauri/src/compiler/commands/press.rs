@@ -16,11 +16,11 @@ impl Command for Press {
 
     fn run(&self, arguments: Vec<String>) -> CommandResult {
         let target = match arguments.get(0) {
-            Some(val) => val,
+            Some(val) => val.chars().next().unwrap(),
             None => return CommandResult::Error("Value is requared".to_string()),
         };
 
-        key::type_string(target, &[], 0.0, 0.0);
+        key::tap(&key::Character(target), &[], 0, 0);
         //Key::Layout(())
         CommandResult::Continue(Some("true".to_string()))
     }
