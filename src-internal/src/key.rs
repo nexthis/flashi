@@ -185,6 +185,61 @@ pub fn toggle<T: KeyCodeConvertible>(key: &T, down: bool, flags: &[Flag], modifi
     system_toggle(key, down, &appended_flags, modifier_delay_ms);
 }
 
+#[cfg(windows)]
+fn char_to_key_code(character: char) -> i32 {
+    match character {
+        ' ' => 32,
+        '1' => 49,
+        '2' => 50,
+        '3' => 51,
+        '4' => 52,
+        '5' => 53,
+        '6' => 54,
+        '7' => 55,
+        '8' => 56,
+        '9' => 57,
+        '0' => 48,
+        '-' => 189,
+        '=' => 187,
+        'q' => 81,
+        'w' => 87,
+        'e' => 69,
+        'r' => 82,
+        't' => 84,
+        'y' => 89,
+        'u' => 85,
+        'i' => 73,
+        'o' => 79,
+        'p' => 80,
+        '[' => 219,
+        ']' => 221,
+        'a' => 65,
+        's' => 83,
+        'd' => 68,
+        'f' => 70,
+        'g' => 71,
+        'h' => 72,
+        'j' => 74,
+        'k' => 75,
+        'l' => 76,
+        ';' => 186,
+        '\'' => 222,
+        '\\' => 220,
+        '|' => 226,
+        'z' => 90,
+        'x' => 88,
+        'c' => 67,
+        'v' => 86,
+        'b' => 66,
+        'n' => 78,
+        'm' => 77,
+        ',' => 188,
+        '.' => 190,
+        '/' => 191,
+        _ => 0x164,
+    }
+}
+
 #[cfg(target_os = "macos")]
 fn char_to_key_code(character: char) -> CGKeyCode {
     use core_graphics::event::EventField;
@@ -533,32 +588,38 @@ fn system_toggle<T: KeyCodeConvertible>(
     flags: &[Flag],
     modifier_delay_ms: u64,
 ) {
+    use winapi::ctypes::c_int;
+    use winapi::shared::minwindef::UINT;
     use winapi::um::winuser::{
-        SendInput, INPUT, INPUT_KEYBOARD, KEYBDINPUT, KEYEVENTF_KEYUP, KEYEVENTF_UNICODE,
+        INPUT_u, SendInput, INPUT, INPUT_KEYBOARD, KEYBDINPUT, KEYEVENTF_KEYUP, KEYEVENTF_UNICODE,
     };
     for &flag in flags.iter() {
         win_send_key_event(WinKeyCode::from(flag), down, modifier_delay_ms);
     }
     if let Some(character) = key.character() {
         let flags = if down { 0 } else { KEYEVENTF_KEYUP };
-        let mut buf = [0; 2];
-        for word in character.encode_utf16(&mut buf) {
-            let mut input = INPUT {
-                type_: INPUT_KEYBOARD,
-                u: unsafe {
-                    std::mem::transmute_copy(&KEYBDINPUT {
-                        wVk: 0,
-                        wScan: *word,
-                        dwFlags: KEYEVENTF_UNICODE | flags,
-                        time: 0,
-                        dwExtraInfo: 0,
-                    })
-                },
-            };
-            unsafe {
-                SendInput(1, &mut input, std::mem::size_of::<INPUT>() as i32);
-            }
-        }
+
+        let mut union: INPUT_u = unsafe { std::mem::zeroed() };
+        let inner_union = unsafe { union.ki_mut() };
+        println!("{}", char_to_key_code(character) as u16);
+        *inner_union = KEYBDINPUT {
+            wVk: char_to_key_code(character) as u16,
+            wScan: 0,
+            dwFlags: flags,
+            time: 0,
+            dwExtraInfo: 0,
+        };
+        let mut input = [INPUT {
+            type_: INPUT_KEYBOARD,
+            u: union,
+        }; 1];
+        let value = unsafe {
+            SendInput(
+                input.len() as UINT,
+                input.as_mut_ptr(),
+                std::mem::size_of::<INPUT>() as c_int,
+            )
+        };
     } else {
         win_send_key_event(key.code(), down, 0);
     }
