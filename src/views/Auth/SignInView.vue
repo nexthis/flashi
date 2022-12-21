@@ -1,19 +1,18 @@
 <template>
-    <q-page padding class="flex">
+    <q-page padding class="flex bg-image">
         <q-card class="card">
-            <div class="image-box">
-                <img src="@/assets/images/login.jpg" class="image" alt="bg" />
-            </div>
-            <div class="image-spacer flex flex-col justify-center">
-                <div class="text-h3 text-center text-bold z-top">{{ t("title") }}</div>
-                <div class="flex justify-center q-mt-lg">
-                    <q-btn round size="lg" color="red" icon="mdi-google" />
-                    <q-btn round size="lg" class="q-ml-lg" color="blue" icon="mdi-facebook" />
-                    <q-btn round size="lg" class="q-ml-lg" color="dark" icon="mdi-github" />
+            <div class="flex flex-col justify-center header-image">
+                <div class="q-py-xl">
+                    <div class="text-h3 text-center text-bold z-top">{{ t("title") }}</div>
+                    <div class="flex justify-center q-mt-lg">
+                        <q-btn round size="lg" color="red" icon="mdi-google" />
+                        <q-btn round size="lg" class="q-ml-lg" color="blue" icon="mdi-facebook" />
+                        <q-btn round size="lg" class="q-ml-lg" color="dark" icon="mdi-github" />
+                    </div>
                 </div>
             </div>
 
-            <q-card-section>
+            <q-card-section class="card-body">
                 <q-input outlined :label="t('email')" v-model="email" />
                 <q-input outlined class="q-mt-lg" :label="t('password')" type="password" v-model="password" />
                 <div class="q-mt-sm flex justify-between items-center">
@@ -30,7 +29,7 @@
                 </div>
 
                 <div class="q-mt-lg flex justify-end">
-                    <q-btn @click="onSignIn" size="lg" color="primary">{{ t("login") }}</q-btn>
+                    <q-btn @click="onSignIn" color="primary">{{ t("login") }}</q-btn>
                 </div>
             </q-card-section>
         </q-card>
@@ -80,6 +79,19 @@ const onSignIn = async () => {
 </script>
 
 <style scoped lang="scss">
+.bg-image {
+    // background-image: url(@/assets/images/loginBg.svg);
+    // background-repeat: no-repeat;
+    // background-size: cover;
+}
+
+.header-image {
+    background-image: url(@/assets/images/login.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center bottom;
+}
+
 a {
     text-decoration: none;
 }
@@ -87,6 +99,9 @@ a {
     max-width: 450px;
     width: 100%;
     margin: auto;
+}
+
+.card-body {
     padding: 20px 30px;
 }
 
@@ -96,30 +111,6 @@ a {
 
 .checkbox {
     margin-left: -5px;
-}
-
-.image-box {
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 0;
-}
-
-.image {
-    clip-path: ellipse(80% 45% at 36% 8%);
-    max-width: 100%;
-    height: auto;
-}
-
-.image-spacer {
-    min-height: 230px;
-    height: 100%;
-    z-index: 10;
-    margin-bottom: 10px;
-
-    @media (max-height: 700px) {
-        min-height: 190px;
-    }
 }
 
 .forgot {

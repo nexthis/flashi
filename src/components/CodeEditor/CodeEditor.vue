@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { EditorView, basicSetup } from "codemirror"
-import { EXAMPLE } from "flashi-language"
+import { flashi } from "flashi-language"
 import { oneDark } from "@codemirror/theme-one-dark"
 import { ChangeSet } from "@codemirror/state"
 //import { EditorState } from "@codemirror/state"
@@ -24,7 +24,7 @@ onMounted(() => {
                 //https://www.raresportan.com/how-to-make-a-code-editor-with-codemirror6/ Listen for Changes
                 emit("update:modelValue", value.state.doc.toString())
             }),
-            EXAMPLE(),
+            flashi(),
             oneDark,
         ],
         parent: editorRef.value,

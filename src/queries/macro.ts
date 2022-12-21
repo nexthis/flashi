@@ -49,7 +49,7 @@ export async function update(data: UserMacro): Promise<void> {
     const db = getFirestore()
     const user = await getUserOrThrow()
     const document = doc(db, "users", user.uid, "macros", data.uuid)
-    await updateDoc(document, data)
+    await updateDoc(document, data as object)
 }
 
 export async function remove(data: UserMacro): Promise<void> {
