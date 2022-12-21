@@ -22,7 +22,9 @@ onMounted(() => {
             basicSetup,
             EditorView.updateListener.of((value) => {
                 //https://www.raresportan.com/how-to-make-a-code-editor-with-codemirror6/ Listen for Changes
-                emit("update:modelValue", value.state.doc.toString())
+                if (value.docChanged) {
+                    emit("update:modelValue", value.state.doc.toString())
+                }
             }),
             flashi(),
             oneDark,

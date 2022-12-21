@@ -1,7 +1,7 @@
 interface RTCBaseInterface {
     server: string
     client: string
-    createdAt: string
+    createdAt: Timestamp
 }
 
 interface RTCConnectionMarkInterface extends RTCBaseInterface {

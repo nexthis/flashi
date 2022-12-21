@@ -1,3 +1,4 @@
+import "@/styles/main.scss"
 import "@/plugins/firebase"
 import { VueQueryPlugin } from "@tanstack/vue-query"
 import { createPinia } from "pinia"

@@ -23,7 +23,7 @@
                 </router-link>
             </div>
         </div>
-        <div class="content aside-content">
+        <div class="content aside-content scrollbar full-height scroll-y">
             <router-view />
         </div>
     </q-page>
