@@ -16,12 +16,4 @@ pub fn on_message(msg: DataChannelMessage, channel: &Arc<RTCDataChannel>) {
 
 pub fn on_status_change(s: RTCPeerConnectionState) {
     println!("Peer Connection State has changed: {}", s);
-
-    if s == RTCPeerConnectionState::Failed {
-        // Wait until PeerConnection has had no network activity for 30 seconds or another failure. It may be reconnected using an ICE Restart.
-        // Use webrtc.PeerConnectionStateDisconnected if you are interested in detecting faster timeout.
-        // Note that the PeerConnection may come back from PeerConnectionStateDisconnected.
-        println!("Peer Connection has gone to failed exiting");
-        //let _ = done_tx.try_send(());
-    }
 }

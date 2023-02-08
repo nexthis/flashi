@@ -74,16 +74,16 @@ export async function connectionListener(user: User, device: DeviceInterface) {
 
 async function establishConnection(user: User, offer: { sdp: string; type: string }) {
     try {
-        const result = await invoke<{ sdp: string; type: string }>("connect", {
+        await invoke<{ sdp: string; type: string }>("connect", {
             offer: JSON.stringify(offer),
         })
 
-        await addDoc(collection(db, "users", user.uid, "client"), {
-            ...result,
-            server: serverKey,
-            client: clientKey,
-            createdAt: serverTimestamp(),
-        })
+        // await addDoc(collection(db, "users", user.uid, "client"), {
+        //     ...result,
+        //     server: serverKey,
+        //     client: clientKey,
+        //     createdAt: serverTimestamp(),
+        // })
         // setTimeout(async () => {
         //     console.log(`add answer: `, result)
         //     await addDoc(collection(db, "users", user.uid, "client"), {
@@ -97,6 +97,18 @@ async function establishConnection(user: User, offer: { sdp: string; type: strin
         Notify.create({ color: "negative", message: "Connection fails ", position: "bottom-right" })
     }
 }
+
+listen<RTCIceCandidateInterface>("peer-connection-description", async (event) => {
+    const auth = getAuth()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const user = auth.currentUser!
+    await addDoc(collection(db, "users", user.uid, "client"), {
+        ...event.payload,
+        server: serverKey,
+        client: clientKey,
+        createdAt: serverTimestamp(),
+    })
+})
 
 listen<RTCPeerConnectionState>("peer-connection-state-change", (s) => {
     const connection = useConnection()

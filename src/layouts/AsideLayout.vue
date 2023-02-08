@@ -23,13 +23,42 @@
                 </router-link>
             </div>
         </div>
-        <div class="content aside-content scrollbar full-height scroll-y">
+        <div ref="content" class="content aside-content scrollbar scroll-y">
             <router-view />
         </div>
     </q-page>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+// import { ref, onMounted, onUnmounted } from "vue"
+// import { dom, debounce } from "quasar"
+
+// const content = ref<HTMLDivElement>()
+
+// onMounted(() => {
+//     setContentHeight()
+//     window.addEventListener("resize", onResize)
+// })
+
+// onUnmounted(() => {
+//     window.removeEventListener("resize", onResize)
+// })
+
+// const setContentHeight = () => {
+//     if (!content.value) {
+//         return
+//     }
+
+//     content.value.style.height = `${dom.height(content.value)}px`
+//     console.log("in")
+// }
+
+// const onResize = debounce(() => {
+//     console.log("Test")
+
+//     setContentHeight()
+// }, 500)
+</script>
 
 <style scoped lang="scss">
 .menu {
@@ -66,7 +95,7 @@
     display: flex;
 }
 .content {
-    height: inherit;
+    height: $content-size;
     width: 100%;
     padding: 15px 15px 15px 15px;
 }

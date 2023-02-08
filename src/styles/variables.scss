@@ -13,3 +13,10 @@ $positive  : #00BFA6;
 $negative  : #F50057;
 $info      : #00B0FF;
 $warning   : #F9A826;
+
+
+//INTERNAL 
+
+$titlebar: 30px;
+$titlebar-frame: 2px;
+$content-size: calc(100vh - #{$titlebar + $titlebar-frame});

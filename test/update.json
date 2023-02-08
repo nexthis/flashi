@@ -1,0 +1,11 @@
+{
+  "version": "0.0.2-alpha",
+  "notes": "Test version",
+  "pub_date": "2022-05-08T19:25:57Z",
+  "platforms": {
+    "linux-x86_64": {
+      "signature": "https://firebasestorage.googleapis.com/v0/b/flashi-13c9b.appspot.com/o/versions%2Fflashi_0.0.1-alpha.1_amd64.AppImage.tar.gz.sig?alt=media",
+      "url": "https://firebasestorage.googleapis.com/v0/b/flashi-13c9b.appspot.com/o/versions%2Fflashi_0.0.1-alpha.1_amd64.AppImage.tar.gz?alt=media"
+    }
+  }
+}

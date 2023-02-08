@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "flashi",
-    "version": "0.0.1-alpha.1"
+    "version": "0.0.1-alpha"
   },
   "tauri": {
     "allowlist": {
@@ -53,10 +53,10 @@
     "updater": {
       "active": true,
       "endpoints": [
-          "https://releases.myapp.com/{{target}}/{{current_version}}"
+          "https://firebasestorage.googleapis.com/v0/b/flashi-13c9b.appspot.com/o/versions%2Fupdate.json?alt=media"
       ],
-      "dialog": true,
-      "pubkey": "YOUR_UPDATER_SIGNATURE_PUBKEY_HERE"
+      "dialog": false,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDUyNzREOTQ1M0YzMDdDOEYKUldTUGZEQS9SZGwwVWhhWUh4YU5pR2h2VlRqWHBDZkV3bGhicUlaRk9LNExyK3J3cndSaG5zTEEK"
     },
     "windows": [
       {

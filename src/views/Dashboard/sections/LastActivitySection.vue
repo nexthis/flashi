@@ -1,5 +1,5 @@
 <template>
-    <q-card>
+    <q-card flat>
         <div v-if="isSuccess && isSuccessDevice">
             <q-list>
                 <q-item-label header>Activity</q-item-label>

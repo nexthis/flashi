@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 
+
 use app::compiler;
 use app::registry;
 use app::tray;

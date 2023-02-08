@@ -42,7 +42,7 @@ const onMaximize = () => {
 
 <style scoped lang="scss">
 .titlebar {
-    height: 30px;
+    height: $titlebar;
     background: $primary;
     user-select: none;
     display: flex;
@@ -58,8 +58,8 @@ const onMaximize = () => {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    width: $titlebar;
+    height: $titlebar;
 }
 
 .titlebar-button:hover {
@@ -70,7 +70,7 @@ const onMaximize = () => {
 <style lang="scss">
 //TODO change
 .q-page {
-    border: $primary 2px solid;
+    border: $primary $titlebar-frame solid;
     border-top: none;
 }
 
@@ -82,7 +82,7 @@ const onMaximize = () => {
         background: darken($positive, 5%);
     }
     .q-page {
-        border: $positive 2px solid;
+        border: $positive $titlebar-frame solid;
         border-top: none;
     }
 }
