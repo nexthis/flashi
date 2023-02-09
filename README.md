@@ -5,7 +5,7 @@
 
 <p>
     <strong align="center">
-        Flashi is a tauri app, based on WebRTC technology to its purpose is to replace the AutoHotkey by offering a more extensive ecosystem
+        Flashi is a tauri application powered by WebRTC technology with the objective of enhancing the functionality of AutoHotkey by providing a more comprehensive    ecosystem.
     </strong>
 </p>
 
