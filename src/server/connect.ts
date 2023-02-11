@@ -77,29 +77,14 @@ async function establishConnection(user: User, offer: { sdp: string; type: strin
         await invoke<{ sdp: string; type: string }>("connect", {
             offer: JSON.stringify(offer),
         })
-
-        // await addDoc(collection(db, "users", user.uid, "client"), {
-        //     ...result,
-        //     server: serverKey,
-        //     client: clientKey,
-        //     createdAt: serverTimestamp(),
-        // })
-        // setTimeout(async () => {
-        //     console.log(`add answer: `, result)
-        //     await addDoc(collection(db, "users", user.uid, "client"), {
-        //         ...result,
-        //         server: serverKey,
-        //         client: clientKey,
-        //         createdAt: serverTimestamp(),
-        //     })
-        // }, 5000)
     } catch (err) {
-        Notify.create({ color: "negative", message: "Connection fails ", position: "bottom-right" })
+        Notify.create({ color: "negative", message: "Connection fails: " + err, position: "bottom-right" })
     }
 }
 
 listen<RTCIceCandidateInterface>("peer-connection-description", async (event) => {
     const auth = getAuth()
+
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const user = auth.currentUser!
     await addDoc(collection(db, "users", user.uid, "client"), {
@@ -132,4 +117,3 @@ listen<RTCIceCandidateInterface>("on-ice-candidate", (event) => {
         createdAt: serverTimestamp(),
     })
 })
-//candidate:842163049 1 udp 1677729535 37.47.225.160 24504 typ srflx raddr 0.0.0.0 rport 0 generation 0 ufrag 1/u9 network-cost 999

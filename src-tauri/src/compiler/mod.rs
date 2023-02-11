@@ -2,8 +2,13 @@ use duckscript;
 use duckscript::runner;
 use duckscript::types;
 use duckscript::types::error::ScriptError;
+use duckscript::types::runtime::StateValue;
+use webrtc::data_channel::RTCDataChannel;
 
+use std::cell::RefCell;
 use std::fmt::Display;
+use std::rc::Rc;
+use std::sync::Arc;
 
 mod commands;
 
@@ -11,6 +16,21 @@ mod commands;
 pub fn compile(value: String) -> Result<String, String> {
     let mut context = types::runtime::Context::new();
 
+    commands::load(&mut context.commands);
+
+    match runner::run_script(value.to_string().as_str(), context) {
+        Ok(_) => return Ok("succes".to_string()),
+        Err(err) => return Err(err.to_string()),
+    }
+}
+
+pub fn compile_with_chanel(value: String, channel: Arc<RTCDataChannel>) -> Result<String, String> {
+    let mut context = types::runtime::Context::new();
+
+    context.state.insert(
+        "data_channel".to_string(),
+        StateValue::Any(Rc::from(RefCell::from(channel.clone()))),
+    );
     commands::load(&mut context.commands);
 
     match runner::run_script(value.to_string().as_str(), context) {

@@ -6,7 +6,7 @@
     </div>
 
     <div class="row q-col-gutter-md q-mt-lg">
-        <div class="col-6">
+        <!-- <div class="col-6">
             <q-card>
                 <q-card-section>
                     <div class="flex items-center">
@@ -42,7 +42,7 @@
 
                 <q-btn flat class="full-width q-mt-sm">bezpieczeństwo i hasła</q-btn>
             </q-card>
-        </div>
+        </div> -->
     </div>
 </template>
 

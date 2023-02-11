@@ -12,10 +12,23 @@ use webrtc::peer_connection::configuration::RTCConfiguration;
 use webrtc::peer_connection::peer_connection_state::RTCPeerConnectionState;
 use webrtc::peer_connection::sdp::session_description::RTCSessionDescription;
 mod events;
+mod payload;
+
+pub static mut INSTANCE: u8 = 0;
 
 //TODO: This is proof of concept, try to refactor
 #[tauri::command]
 pub async fn connect(offer: String, window: tauri::Window) -> Result<String, String> {
+    let instance = unsafe { INSTANCE };
+
+    if instance != 0 {
+        return Err("Connection is already established".to_string());
+    }
+
+    unsafe {
+        INSTANCE = INSTANCE + 1;
+    }
+
     let mut m = MediaEngine::default();
 
     let window = Arc::new(window);
@@ -59,6 +72,7 @@ pub async fn connect(offer: String, window: tauri::Window) -> Result<String, Str
         Err(error) => panic!("peer_connection: {}", error.to_string()), //return Err(error.to_string()),
     });
 
+    //If done_tx set webRTC end work
     let (done_tx, mut done_rx) = tokio::sync::mpsc::channel::<()>(1);
 
     let window_ref = Arc::clone(&window);
@@ -137,6 +151,14 @@ pub async fn connect(offer: String, window: tauri::Window) -> Result<String, Str
             done_tx.try_send(());
         }
 
+        // if s == RTCPeerConnectionState::Disconnected {
+        //     // Wait until PeerConnection has had no network activity for 30 seconds or another failure. It may be reconnected using an ICE Restart.
+        //     // Use webrtc.PeerConnectionStateDisconnected if you are interested in detecting faster timeout.
+        //     // Note that the PeerConnection may come back from PeerConnectionStateDisconnected.
+        //     println!("Peer Connection has gone to failed exiting");
+        //     done_tx.try_send(());
+        // }
+
         Box::pin(async {})
     }));
 
@@ -146,14 +168,18 @@ pub async fn connect(offer: String, window: tauri::Window) -> Result<String, Str
         let d_id = d.id();
         println!("New DataChannel {} {}", d_label, d_id);
 
+        // d.send(data)
         // Register channel opening handling
         Box::pin(async move {
+            let (message_tx, mut message_rx) = std::sync::mpsc::channel::<String>();
+
             let d2 = Arc::clone(&d);
 
             // Register text message handling
             d.on_message(Box::new(move |msg: DataChannelMessage| {
+                let d2 = Arc::clone(&d2);
                 //Run event
-                events::on_message(msg, &d2);
+                events::on_message(msg, d2);
                 Box::pin(async {})
             }));
         })
@@ -207,6 +233,10 @@ pub async fn connect(offer: String, window: tauri::Window) -> Result<String, Str
             println!("received done signal! {}", Arc::strong_count(&window));
         }
     };
+
+    unsafe {
+        INSTANCE = INSTANCE - 1;
+    }
 
     peer_connection.close().await.unwrap();
 
