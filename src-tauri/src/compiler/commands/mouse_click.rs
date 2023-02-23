@@ -1,7 +1,7 @@
 use duckscript::types::command::Command;
 use duckscript::types::command::CommandResult;
 
-use internal::mouse::{click, Button};
+use enigo::*;
 
 #[derive(Clone)]
 pub struct MouseClick {}
@@ -26,9 +26,9 @@ impl Command for MouseClick {
         };
 
         let button = match value.to_lowercase().as_str() {
-            "left" => Button::Left,
-            "right" => Button::Right,
-            "middle" => Button::Middle,
+            "left" => MouseButton::Left,
+            "right" => MouseButton::Right,
+            "middle" => MouseButton::Middle,
             _ => {
                 return CommandResult::Error(
                     "Incorrect value, correct value: left, right or middle ".to_string(),
@@ -36,8 +36,9 @@ impl Command for MouseClick {
             }
         };
 
+        let mut enigo = Enigo::new();
         println!("value: {}", value);
-        click(button, None);
+        enigo.mouse_click(button);
         CommandResult::Continue(Some("true".to_string()))
     }
 }

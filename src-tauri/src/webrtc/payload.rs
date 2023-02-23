@@ -8,7 +8,7 @@ const HEAD_VARIANT_TYPE_ANSWER: &str = "answer";
 const HEAD_VARIANT_TYPE_SYSTEM: &str = "system";
 const HEAD_SEPARATOR: &str = ":";
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub enum PayloadType {
     Code,    // Multiline of command (full code)
     Command, // One line of code
@@ -31,6 +31,18 @@ impl Payload {
             body: body.to_string(),
             raw: value,
         }
+    }
+
+    pub fn body(&self) -> String {
+        return self.body.clone();
+    }
+
+    pub fn variant(&self) -> PayloadType {
+        return self.variant;
+    }
+
+    pub fn raw(&self) -> String {
+        return self.raw.clone();
     }
 
     fn get_variant(head: &str) -> PayloadType {

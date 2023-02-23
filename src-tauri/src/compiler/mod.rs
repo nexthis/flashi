@@ -9,6 +9,7 @@ use std::cell::RefCell;
 use std::fmt::Display;
 use std::rc::Rc;
 use std::sync::Arc;
+use std::sync::RwLock;
 
 mod commands;
 
@@ -24,13 +25,23 @@ pub fn compile(value: String) -> Result<String, String> {
     }
 }
 
-pub fn compile_with_chanel(value: String, channel: Arc<RTCDataChannel>) -> Result<String, String> {
+pub fn compile_with_chanel(
+    value: String,
+    channel: Arc<RTCDataChannel>,
+    last_message: Arc<RwLock<String>>,
+) -> Result<String, String> {
     let mut context = types::runtime::Context::new();
 
     context.state.insert(
         "data_channel".to_string(),
         StateValue::Any(Rc::from(RefCell::from(channel.clone()))),
     );
+
+    context.state.insert(
+        "last_message".to_string(),
+        StateValue::Any(Rc::from(RefCell::from(last_message.clone()))),
+    );
+
     commands::load(&mut context.commands);
 
     match runner::run_script(value.to_string().as_str(), context) {

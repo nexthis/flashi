@@ -1,8 +1,7 @@
 use duckscript::types::command::Command;
 use duckscript::types::command::CommandResult;
 
-use internal::geometry::Point;
-use internal::mouse::move_to;
+use enigo::*;
 
 #[derive(Clone)]
 pub struct MouseMove {}
@@ -27,18 +26,19 @@ impl Command for MouseMove {
             None => return CommandResult::Error("Value Y is required".to_string()),
         };
 
-        let x = match x.parse::<f64>() {
+        let x = match x.parse::<i32>() {
             Ok(val) => val,
             Err(_) => return CommandResult::Error("Value X has wrong format".to_string()),
         };
 
-        let y = match y.parse::<f64>() {
+        let y = match y.parse::<i32>() {
             Ok(val) => val,
             Err(_) => return CommandResult::Error("Value Y has wrong format".to_string()),
         };
 
+        let mut enigo = Enigo::new();
         println!("value: {} - {}", x, y);
-        move_to(Point { x, y });
+        enigo.mouse_move_to(x, y);
         CommandResult::Continue(Some("true".to_string()))
     }
 }

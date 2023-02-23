@@ -171,15 +171,13 @@ pub async fn connect(offer: String, window: tauri::Window) -> Result<String, Str
         // d.send(data)
         // Register channel opening handling
         Box::pin(async move {
-            let (message_tx, mut message_rx) = std::sync::mpsc::channel::<String>();
-
             let d2 = Arc::clone(&d);
-
+            let last_message = Arc::new(std::sync::RwLock::from("".to_string()));
             // Register text message handling
             d.on_message(Box::new(move |msg: DataChannelMessage| {
                 let d2 = Arc::clone(&d2);
                 //Run event
-                events::on_message(msg, d2);
+                events::on_message(msg, d2, last_message.clone());
                 Box::pin(async {})
             }));
         })

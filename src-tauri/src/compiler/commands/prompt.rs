@@ -1,12 +1,11 @@
-use std::any::Any;
-use std::cell::RefCell;
-use std::rc::Rc;
 use std::sync::Arc;
+use std::sync::RwLock;
+use std::thread;
+use std::time;
 
 use duckscript::types::command::Command;
 use duckscript::types::command::CommandResult;
 use duckscript::types::runtime::StateValue;
-use internal::key;
 use webrtc::data_channel::RTCDataChannel;
 
 #[derive(Clone)]
@@ -37,8 +36,6 @@ impl Command for Prompt {
     ) -> CommandResult {
         //&dyn Any<Rc<RefCell<Arc<RTCDataChannel>>>>
 
-        println!("test: data_channel 1");
-
         let data_channel: &StateValue = _state.get("data_channel").unwrap();
 
         let data_channel = match &data_channel {
@@ -52,6 +49,32 @@ impl Command for Prompt {
         };
 
         futures::executor::block_on(data_channel.send_text("XDDD".to_string())).unwrap();
+
+        let last_message: &StateValue = _state.get("last_message").unwrap();
+
+        let last_message = match &last_message {
+            &StateValue::Any(value) => value.borrow(),
+            _ => return CommandResult::Continue(Some("false".to_string())),
+        };
+
+        let last_message = match last_message.downcast_ref::<Arc<RwLock<String>>>() {
+            Some(value) => value,
+            None => return CommandResult::Continue(Some("false".to_string())),
+        };
+
+        let prev_message = last_message.read().unwrap().to_string();
+        println!("message 1 ->>>>>>: {}", prev_message);
+
+        while prev_message == last_message.read().unwrap().to_string() {
+            println!(
+                "loop 1 ->>>>>>: {}, {}",
+                prev_message,
+                last_message.read().unwrap()
+            );
+            thread::sleep(time::Duration::from_millis(200));
+        }
+
+        println!("message 2 ->>>>>>: {}", last_message.read().unwrap());
 
         CommandResult::Continue(Some("true".to_string()))
     }

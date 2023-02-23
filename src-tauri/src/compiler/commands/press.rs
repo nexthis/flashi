@@ -1,6 +1,6 @@
 use duckscript::types::command::Command;
 use duckscript::types::command::CommandResult;
-use internal::key;
+use enigo::*;
 
 #[derive(Clone)]
 pub struct Press {}
@@ -20,7 +20,8 @@ impl Command for Press {
             None => return CommandResult::Error("Value is requared".to_string()),
         };
 
-        key::tap(&key::Character(target), &[], 0, 0);
+        let mut enigo = Enigo::new();
+        enigo.key_click(Key::Layout(target));
         //Key::Layout(())
         CommandResult::Continue(Some("true".to_string()))
     }

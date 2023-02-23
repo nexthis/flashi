@@ -6,6 +6,7 @@ mod mouse_click;
 mod mouse_move;
 mod mouse_move_relative;
 mod press;
+mod prompt;
 
 pub fn load(commands: &mut Commands) -> Result<(), ScriptError> {
     commands.set(press::create())?;
@@ -13,6 +14,7 @@ pub fn load(commands: &mut Commands) -> Result<(), ScriptError> {
     commands.set(mouse_move_relative::create())?;
     commands.set(mouse_click::create())?;
     commands.set(log::create())?;
+    commands.set(prompt::create())?;
 
     match duckscriptsdk::load(commands) {
         Ok(it) => it,
