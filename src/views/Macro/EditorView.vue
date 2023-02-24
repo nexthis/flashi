@@ -1,5 +1,5 @@
 <template>
-    <div class="flex column full-height">
+    <div class="flex column">
         <div class="flex items-center justify-between bar">
             <div @click="isNameEdit = true" v-show="!isNameEdit" class="text-h4 text-grey">
                 {{ name }}
@@ -12,7 +12,14 @@
                 borderless
                 input-class="text-h4"
             />
-            <q-btn @click="onModifier" size="small" color="primary">{{ isEdit ? "Update" : "Create" }}</q-btn>
+            <div>
+                <q-btn @click="onModifier" size="small" color="primary">{{
+                    isEdit ? "Update" : "Create"
+                }}</q-btn>
+                <q-btn color="accent" class="q-ml-lg" @click="run(code)" round>
+                    <q-icon name="mdi-play" />
+                </q-btn>
+            </div>
         </div>
         <div class="flex-1">
             <!-- <div class="flex flex-center flex-1" v-if="isLoading">
@@ -31,6 +38,7 @@ import { useMacroCreate } from "@/composables/queries/useMacroCreate"
 import CodeEditor from "@/components/CodeEditor/CodeEditor.vue"
 import { useMacroGet } from "@/composables/queries/useMacroGet"
 import { useMacroUpdate } from "@/composables/queries/useMacroUpdate"
+import { useScript } from "@/composables/useScript"
 
 const { mutateAsync: mutateAsyncCreate } = useMacroCreate()
 const { mutateAsync: mutateAsyncUpdate } = useMacroUpdate()
@@ -38,6 +46,7 @@ const { mutateAsync: mutateAsyncUpdate } = useMacroUpdate()
 const { t } = useI18n()
 const routes = useRouter()
 const route = useRoute()
+const { run } = useScript()
 const { data, suspense } = useMacroGet(route.params.id as string)
 
 const isNameEdit = ref(false)
