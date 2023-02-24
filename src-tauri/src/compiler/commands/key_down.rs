@@ -7,7 +7,7 @@ pub struct Press {}
 
 impl Command for Press {
     fn name(&self) -> String {
-        "press".to_string()
+        "key_down".to_string()
     }
 
     fn clone_and_box(&self) -> Box<dyn Command> {
@@ -21,8 +21,7 @@ impl Command for Press {
         };
 
         let mut enigo = Enigo::new();
-        enigo.key_click(Key::Layout(target));
-        //Key::Layout(())
+        enigo.key_down(Key::Layout(target));
         CommandResult::Continue(Some("true".to_string()))
     }
 }

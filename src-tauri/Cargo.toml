@@ -26,7 +26,7 @@ duckscriptsdk = "0.8.14"
 machineid-rs = "1.2.1"
 sysinfo = "0.26.7"
 enigo = { git = "https://github.com/enigo-rs/enigo", branch = "master" }
-# internal = { path = "../src-internal" }
+gsmtc = { path = "../lib/win-gsmtc" }
 
 [features]
 # by default Tauri runs in production mode

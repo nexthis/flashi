@@ -4,11 +4,11 @@ use duckscript::types::command::CommandResult;
 use enigo::*;
 
 #[derive(Clone)]
-pub struct MouseClick {}
+pub struct MouseUp {}
 
-impl Command for MouseClick {
+impl Command for MouseUp {
     fn name(&self) -> String {
-        "mouse_click".to_string()
+        "mouse_up".to_string()
     }
 
     fn clone_and_box(&self) -> Box<dyn Command> {
@@ -38,11 +38,11 @@ impl Command for MouseClick {
 
         let mut enigo = Enigo::new();
         println!("value: {}", value);
-        enigo.mouse_click(button);
+        enigo.mouse_up(button);
         CommandResult::Continue(Some("true".to_string()))
     }
 }
 
-pub fn create() -> Box<MouseClick> {
-    Box::new(MouseClick {})
+pub fn create() -> Box<MouseUp> {
+    Box::new(MouseUp {})
 }
