@@ -9,7 +9,7 @@ pub struct KeyPress {}
 
 impl Command for KeyPress {
     fn name(&self) -> String {
-        "press".to_string()
+        "key_press".to_string()
     }
 
     fn clone_and_box(&self) -> Box<dyn Command> {
@@ -22,7 +22,11 @@ impl Command for KeyPress {
             None => return CommandResult::Error("Value is requared".to_string()),
         };
 
-        let target = text_to_key(target.clone());
+        let target = match text_to_key(target.clone()) {
+            Ok(it) => it,
+            Err(err) => return err,
+        };
+
         let mut enigo = Enigo::new();
         enigo.key_click(target);
         CommandResult::Continue(Some("true".to_string()))
