@@ -26,6 +26,18 @@ const commonKeywords = [
     "goto",
 ]
 const commonCommands = [
+    "key_press",
+    "key_up",
+    "key_down",
+    "key_down",
+    "typing",
+    "typing_parse",
+    "mouse_click",
+    "mouse_down",
+    "mouse_up",
+    "move_relative",
+    "move",
+    //base std
     "echo",
     "eval",
     "is_command_defined",
