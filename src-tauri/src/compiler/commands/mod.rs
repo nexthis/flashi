@@ -12,12 +12,14 @@ mod mouse_move_relative;
 mod mouse_up;
 mod prompt;
 mod typing;
+mod typing_parse;
 
 pub fn load(commands: &mut Commands) -> Result<(), ScriptError> {
     commands.set(key_press::create())?;
     commands.set(key_up::create())?;
     commands.set(key_down::create())?;
     commands.set(typing::create())?;
+    commands.set(typing_parse::create())?;
     commands.set(mouse_move::create())?;
     commands.set(mouse_move_relative::create())?;
     commands.set(mouse_click::create())?;

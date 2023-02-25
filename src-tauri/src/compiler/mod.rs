@@ -12,6 +12,7 @@ use std::sync::Arc;
 use std::sync::RwLock;
 
 mod commands;
+mod keys;
 
 #[tauri::command]
 pub fn compile(value: String) -> Result<String, String> {

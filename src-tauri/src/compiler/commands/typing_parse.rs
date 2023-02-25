@@ -3,11 +3,11 @@ use duckscript::types::command::CommandResult;
 use enigo::*;
 
 #[derive(Clone)]
-pub struct Typing {}
+pub struct KeyUp {}
 
-impl Command for Typing {
+impl Command for KeyUp {
     fn name(&self) -> String {
-        "typing".to_string()
+        "typing_parse".to_string()
     }
 
     fn clone_and_box(&self) -> Box<dyn Command> {
@@ -21,11 +21,11 @@ impl Command for Typing {
         };
 
         let mut enigo = Enigo::new();
-        enigo.key_sequence(target);
+        enigo.key_sequence_parse(target);
         CommandResult::Continue(Some("true".to_string()))
     }
 }
 
-pub fn create() -> Box<Typing> {
-    Box::new(Typing {})
+pub fn create() -> Box<KeyUp> {
+    Box::new(KeyUp {})
 }
