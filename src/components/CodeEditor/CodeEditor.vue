@@ -5,10 +5,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { EditorView, basicSetup } from "codemirror"
-import { flashi } from "flashi-language"
 import { oneDark } from "@codemirror/theme-one-dark"
-import { ChangeSet } from "@codemirror/state"
-//import { EditorState } from "@codemirror/state"
+import { StreamLanguage } from "@codemirror/language"
+import { flashi } from "./lang"
 
 const props = defineProps<{ modelValue: string | undefined }>()
 const emit = defineEmits(["update:modelValue"])
@@ -26,7 +25,8 @@ onMounted(() => {
                     emit("update:modelValue", value.state.doc.toString())
                 }
             }),
-            flashi(),
+            //flashi(),
+            StreamLanguage.define(flashi),
             oneDark,
         ],
         parent: editorRef.value,
