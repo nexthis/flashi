@@ -23,3 +23,6 @@ This template should help get you started developing with Vue 3 and TypeScript i
 
 ## Note
 currently the application is in the "sketching" phase, in the next stage its documentation will be added
+
+
+,

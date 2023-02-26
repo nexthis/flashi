@@ -1407,7 +1407,7 @@ dependencies = [
 [[package]]
 name = "enigo"
 version = "0.0.14"
-source = "git+https://github.com/enigo-rs/enigo?branch=master#d702e340c15a92ea83407d1bea6952e69f6d3d22"
+source = "git+https://github.com/nexthis/enigo-fix-win?branch=master#8bd14a536eb2e14a7d3580969a2c5acfd6aeac69"
 dependencies = [
  "core-graphics 0.18.0",
  "libc",
