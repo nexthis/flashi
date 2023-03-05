@@ -20,6 +20,10 @@
 
         <q-separator spaced inset />
 
+        <AutoStartItem />
+
+        <q-separator spaced inset />
+
         <UpdateItem />
 
         <q-separator spaced inset />
@@ -32,6 +36,7 @@ import LanguageItem from "./sections/LanguageItem.vue"
 import ThemeItem from "./sections/ThemeItem.vue"
 import UpdateItem from "./sections/UpdateItem.vue"
 import VersionItem from "./sections/VersionItem.vue"
+import AutoStartItem from "./sections/AutoStartItem.vue"
 
 const { t } = useI18n()
 </script>
