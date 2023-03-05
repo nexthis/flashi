@@ -2,7 +2,7 @@
     <q-card flat>
         <div v-if="isSuccess">
             <q-list>
-                <q-item-label header>Devices List</q-item-label>
+                <q-item-label header>{{ t("title") }}</q-item-label>
                 <q-item v-for="item in data" :key="item.name">
                     <q-item-section avatar>
                         <q-icon
@@ -25,9 +25,12 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n"
 import { useDeviceList } from "@/composables/queries/useDeviceList"
 
 const { data, isSuccess, isLoading } = useDeviceList()
+
+const { t } = useI18n()
 
 const osToIcon = {
     windows: "mdi-microsoft-windows",
@@ -35,3 +38,13 @@ const osToIcon = {
     ios: "mdi-ios",
 }
 </script>
+
+<i18n>
+    "en": {
+        "title": "Devices List",
+    }
+
+    "pl": {
+        "title": "Lista Urządzeń ",
+    }
+</i18n>

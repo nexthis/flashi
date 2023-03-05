@@ -21,7 +21,7 @@
     "firebase": "^9.9.3",
     "lodash": "^4.17.21",
     "pinia": "^2.0.20",
-    "quasar": "^2.11.5",
+    "quasar": "^2.11.7",
     "tauri-plugin-autostart-api": "github:tauri-apps/tauri-plugin-autostart",
     "uninstall": "^0.0.0",
     "vue": "^3.2.37",

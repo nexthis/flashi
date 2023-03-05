@@ -91,7 +91,7 @@ pub async fn connect(offer: String, window: tauri::Window) -> Result<String, Str
 
         let peer_connection_ref = Arc::clone(&peer_connection_ref);
 
-        tauri::async_runtime::spawn(async move {
+        futures::executor::block_on(async move {
             let result = peer_connection_ref
                 .add_ice_candidate(RTCIceCandidateInit {
                     candidate: value["candidate"].to_string(),
