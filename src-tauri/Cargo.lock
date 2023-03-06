@@ -1530,7 +1530,7 @@ dependencies = [
 [[package]]
 name = "enigo"
 version = "0.0.14"
-source = "git+https://github.com/enigo-rs/enigo?branch=master#820e549742a22342ad5035ccd1290cd3a95a78a9"
+source = "git+https://github.com/nexthis/enigo?branch=master#0fd88bf611020c152ff7afa3177e139760e0298c"
 dependencies = [
  "core-graphics 0.18.0",
  "libc",
