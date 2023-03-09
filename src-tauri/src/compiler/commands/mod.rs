@@ -11,6 +11,7 @@ mod mouse_move;
 mod mouse_move_relative;
 mod mouse_up;
 mod prompt;
+mod scroll;
 mod typing;
 mod typing_parse;
 

@@ -27,7 +27,7 @@ duckscript = "0.7.4"
 duckscriptsdk = "0.8.14"
 machineid-rs = "1.2.1"
 sysinfo = "0.26.7"
-enigo = { git = "https://github.com/nexthis/enigo", branch = "master" }
+enigo = { git = "https://github.com/enigo-rs/enigo", branch = "master" }
 
 #gsmtc = { path = "../lib/win-gsmtc" }
 
